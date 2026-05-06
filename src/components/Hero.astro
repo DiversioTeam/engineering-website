@@ -1,0 +1,336 @@
+---
+// Hero.astro - Agentic Tools hero.
+import Terminal from "./Terminal.astro";
+import { plugins, piPackages } from "../data/marketplace.json";
+import { siteConfig } from "../../site.config.mjs";
+
+const totalSkills = plugins.reduce((sum, p) => sum + p.skills.length, 0);
+---
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-left">
+      <span class="label-caps hero-kicker">{siteConfig.toolsSectionName}</span>
+      <h1 class="hero-title">Open tools for Claude Code, Codex, and Pi</h1>
+      <p class="body-lg hero-desc">
+        Browse plugins, reusable skills, and Pi extensions from Diversio Engineering.
+      </p>
+      <div class="hero-actions">
+        <a href={siteConfig.routes.docs} class="btn btn-primary btn-md">Read the Docs</a>
+        <a href={siteConfig.routes.registry} class="btn btn-secondary btn-md">Browse Registry</a>
+        <a href={siteConfig.githubUrl} class="btn btn-secondary btn-md" target="_blank" rel="noopener noreferrer" aria-label="DiversioTeam on GitHub">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+          </svg>
+          GitHub
+        </a>
+      </div>
+      <div class="hero-terminal">
+        <Terminal
+          lang="slash commands"
+          prompt="$"
+          lines={[
+            "/monty-code-review:code-review  # deep Django code review",
+            "/backend-atomic-commit:commit  # pre-commit + atomic commit",
+            "/visual-explainer:explain      # generate HTML explainers",
+            "/backend-release:create        # cut a new release PR",
+            "/backend-pr-workflow:check-pr # PR + migration safety",
+          ]}
+        />
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-stats">
+        <div class="stat-card">
+          <span class="stat-num">{plugins.length}</span>
+          <span class="stat-label label-caps">Plugins</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">{piPackages.length}</span>
+          <span class="stat-label label-caps">Pi Packages</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">{totalSkills}</span>
+          <span class="stat-label label-caps">Skills</span>
+        </div>
+      </div>
+      <div class="arch-panel">
+        <div class="arch-panel-header">
+          <span class="label-caps">Ecosystem</span>
+          <span class="code-text-sm arch-panel-id">FIG.01</span>
+        </div>
+        <div class="arch-panel-body">
+          <div class="eco-flow">
+            <div class="eco-node eco-node-plugins">
+              <span class="code-text-sm">{plugins.length} Plugins</span>
+              <span class="eco-sublabel">slash commands</span>
+            </div>
+            <div class="eco-arrow">→</div>
+            <div class="eco-node eco-node-skills">
+              <span class="code-text-sm">{totalSkills} Skills</span>
+              <span class="eco-sublabel">SKILL.md</span>
+            </div>
+            <div class="eco-arrow">→</div>
+            <div class="eco-node eco-node-agent">
+              <span class="code-text-sm">Agent Harness</span>
+              <span class="eco-sublabel">CC · Codex · Pi</span>
+            </div>
+          </div>
+          <div class="eco-flow-secondary">
+            <div class="eco-node eco-node-pi">
+              <span class="code-text-sm">{piPackages.length} Pi Packages</span>
+              <span class="eco-sublabel">extensions · tools</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: var(--space-3xl) var(--space-margin) 0;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, var(--grid-pattern-color) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-pattern-color) 1px, transparent 1px);
+    background-size: var(--grid-pattern-size) var(--grid-pattern-size);
+    pointer-events: none;
+    opacity: 0.5;
+    z-index: 0;
+  }
+
+  .hero-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    padding-bottom: var(--space-3xl);
+    min-width: 0;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    min-width: 0;
+  }
+
+  .hero-kicker {
+    color: var(--color-primary);
+  }
+
+  .hero-title {
+    font-family: var(--font-headline);
+    font-size: clamp(2.4rem, 4vw, var(--text-headline-xl));
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-headline);
+    letter-spacing: var(--tracking-headline);
+    color: var(--color-text);
+    text-wrap: balance;
+    max-width: 12ch;
+  }
+
+  .hero-desc {
+    color: var(--color-text-secondary);
+    max-width: 42rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    align-items: stretch;
+    min-width: 0;
+  }
+
+  .hero-terminal {
+    margin-top: var(--space-md);
+    max-width: 100%;
+  }
+
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    min-width: 0;
+  }
+
+  /* Stats row */
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-sm);
+  }
+
+  .stat-card {
+    background: var(--color-surface);
+    border: var(--border-hairline);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg) var(--space-md);
+    text-align: center;
+    box-shadow: var(--shadow-block-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2xs);
+    min-width: 0;
+  }
+
+  .stat-num {
+    font-family: var(--font-headline);
+    font-size: 2rem;
+    font-weight: var(--weight-bold);
+    color: var(--color-primary);
+    line-height: 1;
+  }
+
+  .stat-label {
+    color: var(--color-text-secondary);
+  }
+
+  /* Architecture panel */
+  .arch-panel {
+    width: 100%;
+    background: var(--color-surface);
+    border: var(--border-hairline);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-block);
+    overflow: hidden;
+  }
+
+  .arch-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-xs) var(--space-md);
+    background: var(--color-surface-low);
+    border-bottom: var(--border-hairline);
+  }
+
+  .arch-panel-header .label-caps {
+    color: var(--color-text-secondary);
+  }
+
+  .arch-panel-id {
+    color: var(--color-text-muted);
+  }
+
+  .arch-panel-body {
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    min-width: 0;
+  }
+
+  .eco-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    min-width: 0;
+  }
+
+  .eco-flow-secondary {
+    display: flex;
+    justify-content: center;
+  }
+
+  .eco-node {
+    border: var(--border-hairline);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--color-surface);
+    min-width: 0;
+  }
+
+  .eco-node-plugins {
+    border-color: var(--color-primary);
+    background: var(--color-primary-container);
+  }
+
+  .eco-node-skills {
+    border-color: var(--color-primary);
+  }
+
+  .eco-node-agent {
+    border-color: var(--color-hairline);
+    background: var(--color-surface-low);
+  }
+
+  .eco-node-pi {
+    border-color: var(--color-accent);
+  }
+
+  .eco-sublabel {
+    font-family: var(--font-code);
+    font-size: 0.625rem;
+    color: var(--color-text-muted);
+  }
+
+  .eco-arrow {
+    color: var(--color-text-muted);
+    font-family: var(--font-code);
+    font-size: var(--text-code);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 860px) {
+    .hero {
+      padding: var(--space-2xl) var(--space-md) 0;
+    }
+
+    .hero-actions > .btn {
+      width: 100%;
+    }
+
+    .hero-stats {
+      grid-template-columns: 1fr;
+    }
+
+    .stat-card {
+      padding: var(--space-md) var(--space-sm);
+    }
+
+    .stat-num {
+      font-size: 1.75rem;
+    }
+
+    .arch-panel-body {
+      padding: var(--space-md);
+    }
+
+    .eco-flow {
+      flex-wrap: wrap;
+    }
+
+    .eco-arrow {
+      display: none;
+    }
+
+    .eco-node {
+      flex: 1 1 100%;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .hero-grid {
+      grid-template-columns: 3fr 2fr;
+    }
+  }
+</style>

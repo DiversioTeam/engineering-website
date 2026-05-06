@@ -1,0 +1,54 @@
+---
+// PageLayout.astro - Marketing/page layout: header + main + footer
+import BaseLayout from "./BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+export type HeaderNavKey = "home" | "howWeWork" | "systems" | "tools" | "blog" | "community";
+
+export interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  canonicalUrl?: string;
+  socialTitle?: string;
+  socialDescription?: string;
+  socialImageAlt?: string;
+  socialType?: "website" | "article";
+  ogImageWidth?: number;
+  ogImageHeight?: number;
+  currentNav?: HeaderNavKey;
+}
+
+const {
+  title,
+  description,
+  ogImage,
+  canonicalUrl,
+  socialTitle,
+  socialDescription,
+  socialImageAlt,
+  socialType,
+  ogImageWidth,
+  ogImageHeight,
+  currentNav,
+} = Astro.props;
+---
+<BaseLayout
+  {title}
+  {description}
+  {ogImage}
+  {canonicalUrl}
+  {socialTitle}
+  {socialDescription}
+  {socialImageAlt}
+  {socialType}
+  {ogImageWidth}
+  {ogImageHeight}
+>
+  <Header currentNav={currentNav} />
+  <main>
+    <slot />
+  </main>
+  <Footer />
+</BaseLayout>

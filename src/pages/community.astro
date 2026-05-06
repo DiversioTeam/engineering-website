@@ -1,0 +1,461 @@
+---
+import PageLayout from "../layouts/PageLayout.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import EmailLink from "../components/EmailLink.astro";
+import { communityContributionSummary, communityLeadRepo } from "../data/community";
+import { openSourceProjects } from "../data/open-source-projects";
+import { siteEntryPoints } from "../data/site-entry-points";
+import { getSiteMetrics } from "../utils/site-metrics";
+import { siteConfig } from "../../site.config.mjs";
+
+const communityPage = {
+  title: "Community",
+  metaDescription: "Ways to engage with Diversio Engineering through writing, systems, open-source tools, and technical collaboration.",
+  heroTitle: "Stay close to the work",
+  heroDescription: "Diversio Engineering shares tools, writing, systems notes, and working practices in the open. This is where to start if you want to follow the work, use it, or contribute back to it.",
+} as const;
+const metrics = await getSiteMetrics();
+const repoUrl = siteConfig.githubRepoUrl;
+const issuesUrl = `${repoUrl}/issues`;
+const pullsUrl = `${repoUrl}/pulls`;
+const contributingUrl = `${repoUrl}/blob/main/CONTRIBUTING.md`;
+---
+
+<PageLayout
+  title={communityPage.title}
+  description={communityPage.metaDescription}
+  ogImage="/og/community.png"
+  socialImageAlt="Diversio Engineering community"
+  currentNav="community"
+>
+  <section class="page-section community-hero">
+    <SectionHeader
+      label="Community"
+      title={communityPage.heroTitle}
+      titleLevel="h1"
+      description={communityPage.heroDescription}
+      variant="community"
+    />
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-num">{metrics.publishedPostCount}</span>
+        <span class="label-caps stat-label">Articles</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">{metrics.stackLayerCount}</span>
+        <span class="label-caps stat-label">Stack layers</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">{metrics.toolSurfaceCount}</span>
+        <span class="label-caps stat-label">Tools & packages</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">{metrics.openRepoCount}</span>
+        <span class="label-caps stat-label">Open repos</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <SectionHeader
+      label="Engage"
+      title="Choose the path that matches your interest"
+      description="The best way in depends on whether you want to read, inspect, use, or contribute."
+      variant="community"
+    />
+    <div class="community-grid">
+      <a href={siteEntryPoints.blog.href} class="community-card">
+        <span class="label-caps community-kicker">{siteEntryPoints.blog.label}</span>
+        <h2 class="headline-sm">{siteEntryPoints.blog.title}</h2>
+        <p class="body-md community-copy">
+          {siteEntryPoints.blog.description}
+        </p>
+        <span class="label-caps community-link">{siteEntryPoints.blog.cta} →</span>
+      </a>
+
+      <a href={siteEntryPoints.systems.href} class="community-card">
+        <span class="label-caps community-kicker">{siteEntryPoints.systems.label}</span>
+        <h2 class="headline-sm">{siteEntryPoints.systems.title}</h2>
+        <p class="body-md community-copy">
+          {siteEntryPoints.systems.description}
+        </p>
+        <span class="label-caps community-link">{siteEntryPoints.systems.cta} →</span>
+      </a>
+
+      <a href={siteEntryPoints.tools.href} class="community-card">
+        <span class="label-caps community-kicker">{siteEntryPoints.tools.label}</span>
+        <h2 class="headline-sm">{siteEntryPoints.tools.title}</h2>
+        <p class="body-md community-copy">
+          {siteEntryPoints.tools.description}
+        </p>
+        <span class="label-caps community-link">{siteEntryPoints.tools.cta} →</span>
+      </a>
+
+      <a href="#agentic-tools-contribute" class="community-card">
+        <span class="label-caps community-kicker">Contribute</span>
+        <h2 class="headline-sm">{communityContributionSummary.title}</h2>
+        <p class="body-md community-copy">
+          {communityContributionSummary.description}
+        </p>
+        <span class="label-caps community-link">{communityContributionSummary.cta} →</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <SectionHeader
+      label="Open Source"
+      title="Projects you can explore right now"
+      description="Agentic Tools is the largest open surface, alongside a smaller set of related repos from Diversio Engineering."
+      variant="community"
+    />
+    <div class="project-showcase">
+      <a href={repoUrl} class="project-lead-card" target="_blank" rel="noopener">
+        <div class="project-lead-header">
+          <span class="label-caps community-kicker">Featured repo</span>
+          <span class="code-text-sm project-lead-id">DiversioTeam/agent-skills-marketplace</span>
+        </div>
+        <h2 class="headline-md project-lead-title">{communityLeadRepo.title}</h2>
+        <p class="body-md community-copy">
+          {communityLeadRepo.description}
+        </p>
+        <span class="label-caps community-link">{communityLeadRepo.cta} →</span>
+      </a>
+
+      <div class="community-grid">
+        {openSourceProjects.map((project) => (
+          <a href={project.url} class="community-card" target="_blank" rel="noopener">
+            <span class="label-caps community-kicker">{project.category}</span>
+            <h2 class="headline-sm">{project.name}</h2>
+            <p class="body-md community-copy">{project.description}</p>
+            <span class="code-text-sm project-repo">{project.repo}</span>
+            <span class="label-caps community-link">Open repository →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section" id="agentic-tools-contribute">
+    <SectionHeader
+      label="Agentic Tools"
+      title="How contribution usually works"
+      description="If you want to contribute directly, this is the main path."
+      variant="community"
+    />
+    <div class="channel-list">
+      <a href={repoUrl} class="channel-row" target="_blank" rel="noopener">
+        <div class="channel-row-meta">
+          <span class="label-caps community-kicker">Repository</span>
+        </div>
+        <div class="channel-row-body">
+          <h2 class="headline-sm">Start with the source</h2>
+          <p class="body-md community-copy">
+            Use the repo when you need the actual code, package layout, docs, manifests, or recent implementation history.
+          </p>
+        </div>
+        <span class="label-caps community-link">Open GitHub →</span>
+      </a>
+
+      <a href={issuesUrl} class="channel-row" target="_blank" rel="noopener">
+        <div class="channel-row-meta">
+          <span class="label-caps community-kicker">Issues</span>
+        </div>
+        <div class="channel-row-body">
+          <h2 class="headline-sm">Report drift and propose changes</h2>
+          <p class="body-md community-copy">
+            Use issues when behavior, docs, or metadata stop matching what the repository actually does.
+          </p>
+        </div>
+        <span class="label-caps community-link">View issues →</span>
+      </a>
+
+      <a href={pullsUrl} class="channel-row" target="_blank" rel="noopener">
+        <div class="channel-row-meta">
+          <span class="label-caps community-kicker">Pull Requests</span>
+        </div>
+        <div class="channel-row-body">
+          <h2 class="headline-sm">Keep changes reviewable</h2>
+          <p class="body-md community-copy">
+            Skills, manifests, docs, and Pi packages all move through normal PR review, so changes should stay scoped and easy to inspect.
+          </p>
+        </div>
+        <span class="label-caps community-link">Browse PRs →</span>
+      </a>
+
+      <a href={contributingUrl} class="channel-row" target="_blank" rel="noopener">
+        <div class="channel-row-meta">
+          <span class="label-caps community-kicker">Contributor Guide</span>
+        </div>
+        <div class="channel-row-body">
+          <h2 class="headline-sm">Understand the repo conventions</h2>
+          <p class="body-md community-copy">
+            Read the guide for package shape, wrapper expectations, validation commands, and doc-sync rules before opening larger changes.
+          </p>
+        </div>
+        <span class="label-caps community-link">Read guide →</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <SectionHeader
+      label="Collaboration"
+      title="How collaboration tends to go well"
+      description="The strongest contributions usually make the code, the reasoning, and the next step easier to understand."
+      variant="community"
+    />
+    <div class="workflow-grid">
+      <div class="workflow-step">
+        <span class="workflow-num code-text">01</span>
+        <h3 class="headline-sm">Start from a concrete problem</h3>
+        <p class="body-md">The best discussions begin with something real: a workflow that drifts, a missing piece of documentation, a tool gap, or a repeated source of friction.</p>
+      </div>
+      <div class="workflow-step">
+        <span class="workflow-num code-text">02</span>
+        <h3 class="headline-sm">Keep the reasoning close to the change</h3>
+        <p class="body-md">Changes land faster when the intent is visible in the docs, the issue, the PR, or the implementation itself instead of hidden in private context.</p>
+      </div>
+      <div class="workflow-step">
+        <span class="workflow-num code-text">03</span>
+        <h3 class="headline-sm">Prefer reusable improvements</h3>
+        <p class="body-md">Strong contributions do more than fix the local issue. They often leave behind a clearer workflow, a better guardrail, or a tool the next engineer can use.</p>
+      </div>
+      <div class="workflow-step">
+        <span class="workflow-num code-text">04</span>
+        <h3 class="headline-sm">Use the channel that fits</h3>
+        <p class="body-md">Some conversations belong in the repo. Others belong in writing, systems notes, or direct technical contact. Picking the right path keeps momentum higher.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section support-section">
+    <SectionHeader
+      label="Support"
+      title="Need help, want to reach out, or found something sensitive?"
+      description="Use the path that matches the conversation so it gets handled in the right place."
+      variant="community"
+    />
+    <div class="support-grid">
+      <div class="support-card">
+        <span class="label-caps community-kicker">General contact</span>
+        <h3 class="headline-sm"><EmailLink plain label="Email the engineering team" /></h3>
+        <p class="body-md community-copy">
+          Use email for broader technical questions, collaboration notes, or when GitHub is not the right first step.
+        </p>
+      </div>
+      <a href="/security" class="support-card support-card--link">
+        <span class="label-caps community-kicker">Security</span>
+        <h3 class="headline-sm">Responsible disclosure</h3>
+        <p class="body-md community-copy">
+          If the issue is sensitive, use the security page instead of opening a public thread.
+        </p>
+        <span class="label-caps community-link">Read policy →</span>
+      </a>
+      <a href="/docs" class="support-card support-card--link">
+        <span class="label-caps community-kicker">Docs</span>
+        <h3 class="headline-sm">Tooling and distribution docs</h3>
+        <p class="body-md community-copy">
+          The docs section explains package shape, runtime distribution, install flows, and the conventions behind the tooling.
+        </p>
+        <span class="label-caps community-link">Open docs →</span>
+      </a>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .page-section {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--space-3xl) var(--space-margin);
+  }
+
+  .page-section + .page-section {
+    border-top: var(--border-hairline);
+  }
+
+  .community-hero {
+    padding-top: var(--space-3xl);
+  }
+
+  .project-showcase,
+  .community-grid,
+  .support-grid,
+  .channel-list,
+  .workflow-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  @media (min-width: 768px) {
+    .community-grid,
+    .support-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .community-card,
+  .project-lead-card,
+  .support-card,
+  .channel-row,
+  .workflow-step,
+  .stat-card {
+    background: var(--color-surface);
+    border: var(--border-hairline);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-block-sm);
+  }
+
+  .community-card,
+  .project-lead-card,
+  .support-card,
+  .channel-row,
+  .workflow-step {
+    padding: var(--space-xl);
+  }
+
+  .community-card,
+  .project-lead-card,
+  .channel-row,
+  .support-card--link {
+    text-decoration: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .community-card:hover,
+  .project-lead-card:hover,
+  .channel-row:hover,
+  .support-card--link:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-block);
+    transform: translateY(-1px);
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-sm);
+  }
+
+  @media (min-width: 1200px) {
+    .stats-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .workflow-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .stat-card {
+    padding: var(--space-lg) var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    justify-content: center;
+    min-height: 7.5rem;
+  }
+
+  .stat-num {
+    font-family: var(--font-headline);
+    font-size: var(--text-headline-lg);
+    font-weight: var(--weight-bold);
+    color: var(--color-primary);
+    line-height: 1;
+  }
+
+  .stat-label,
+  .community-copy,
+  .project-repo {
+    color: var(--color-text-secondary);
+  }
+
+  .community-kicker,
+  .community-link {
+    color: var(--color-primary);
+  }
+
+  .project-lead-card {
+    background: linear-gradient(180deg, var(--color-surface), var(--color-surface-low));
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .project-lead-header,
+  .channel-row-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--color-text-muted);
+  }
+
+  .project-lead-id {
+    color: var(--color-text-muted);
+  }
+
+  .project-lead-title,
+  .channel-row-body h2,
+  .community-card h2,
+  .workflow-step h3,
+  .support-card h3 {
+    text-wrap: balance;
+  }
+
+  .channel-row {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr) auto;
+    align-items: start;
+    gap: var(--space-lg);
+  }
+
+  .channel-row-body {
+    min-width: 0;
+  }
+
+  .workflow-step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    background: linear-gradient(180deg, var(--color-surface), var(--color-surface-low));
+  }
+
+  .workflow-num {
+    font-size: var(--text-headline-lg);
+    color: var(--color-primary-container);
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  @media (max-width: 860px) {
+    .page-section {
+      padding: var(--space-2xl) var(--space-md);
+    }
+
+    .community-hero {
+      padding-top: var(--space-2xl);
+    }
+
+    .community-card,
+    .project-lead-card,
+    .support-card,
+    .channel-row,
+    .workflow-step {
+      padding: var(--space-lg);
+    }
+
+    .project-lead-header,
+    .channel-row-meta {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .channel-row {
+      grid-template-columns: 1fr;
+      gap: var(--space-sm);
+    }
+  }
+</style>

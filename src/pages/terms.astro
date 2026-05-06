@@ -1,0 +1,48 @@
+---
+// terms.astro - Terms page
+import PageLayout from "../layouts/PageLayout.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import EmailLink from "../components/EmailLink.astro";
+import { siteConfig } from "../../site.config.mjs";
+---
+
+<PageLayout
+  title="Terms"
+  description={`Terms of use for ${siteConfig.siteName} and its open-source tools and docs.`}
+  ogImage="/og/terms.png"
+  socialImageAlt="Terms of use social preview"
+>
+  <section class="page-section">
+    <SectionHeader
+      label="Legal"
+      title="Terms of Use"
+      titleLevel="h1"
+      description={`${siteConfig.siteName} includes open-source tools and documentation. Published skills are provided as-is under their respective licenses, typically MIT.`}
+    />
+    <div class="prose">
+      <p class="body-lg" style="color: var(--color-text-secondary)">
+        By using {siteConfig.siteName}, you agree that:
+      </p>
+      <ul class="body-md" style="color: var(--color-text-secondary); margin-top: var(--space-md); padding-left: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-sm);">
+        <li>Published skills and docs are provided for informational and instructional purposes. The operator of any agent harness is responsible for validating behavior before deployment.</li>
+        <li>The tools section and its maintainers are not liable for damages arising from the use of published skills or extensions.</li>
+        <li>Skills, docs, and extensions may be updated, deprecated, or removed at any time. Production consumers should pin versions where appropriate.</li>
+        <li>Contributions to the repository are licensed under the project's open-source license (MIT).</li>
+      </ul>
+      <p class="body-md" style="color: var(--color-text-secondary); margin-top: var(--space-xl)">
+        For questions, <EmailLink label="contact us" />.
+      </p>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .page-section {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--space-3xl) var(--space-margin);
+  }
+  .prose {
+    max-width: 40rem;
+  }
+</style>

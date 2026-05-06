@@ -1,0 +1,710 @@
+---
+// Homepage for the broader Diversio Engineering hub.
+//
+// Why this page exists:
+// - `/` should now explain the whole engineering site, not just the tools repo
+// - the tools catalog moved to `/agentic-tools`
+// - the homepage should help visitors choose between how-we-work content, systems notes, tools, and writing
+//
+// Keep this page high-level.
+// Detailed install flows, package docs, and skill docs belong deeper in the site.
+import PageLayout from "../layouts/PageLayout.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import Card from "../components/Card.astro";
+import CardGrid from "../components/CardGrid.astro";
+import { formatEditorialDate } from "../utils/format-date";
+import { getAuthorHref } from "../utils/authors";
+import { pickFeaturedBlogPost } from "../utils/pick-featured-blog-post";
+import { getPublishedBlogPosts } from "../utils/blog-posts";
+import { getSiteMetrics } from "../utils/site-metrics";
+import { homepageFeaturedPluginSlugs } from "../data/agentic-tools";
+import { plugins } from "../data/marketplace.json";
+import { openSourceProjects } from "../data/open-source-projects";
+import { siteEntryPoints } from "../data/site-entry-points";
+import { getMarketplaceItemsBySlug } from "../utils/marketplace-content";
+import { siteConfig } from "../../site.config.mjs";
+
+const featuredTools = getMarketplaceItemsBySlug(plugins, homepageFeaturedPluginSlugs);
+const publishedPosts = await getPublishedBlogPosts();
+const metrics = await getSiteMetrics(publishedPosts);
+const summaryWritingValue = publishedPosts.length > 0 ? String(metrics.publishedPostCount) : String(metrics.systemsHighlightCount);
+const summaryWritingLabel = publishedPosts.length > 0 ? "Published Writing" : "Systems Notes";
+const writingMeta = publishedPosts.length === 0
+  ? "No published posts yet"
+  : metrics.originalPostCount > 0 && metrics.repostCount > 0
+    ? `${metrics.originalPostCount} original · ${metrics.repostCount} repost${metrics.repostCount === 1 ? "" : "s"}`
+    : metrics.originalPostCount > 0
+      ? `${metrics.originalPostCount} original post${metrics.originalPostCount === 1 ? "" : "s"}`
+      : `${metrics.repostCount} curated repost${metrics.repostCount === 1 ? "" : "s"}`;
+const featuredWritingPost = pickFeaturedBlogPost(publishedPosts);
+function getPostSlug(post: { id: string; data: { slug?: string } }) {
+  return (post.data.slug ?? post.id).replace(/\.md$/, "");
+}
+---
+
+<PageLayout
+  title={siteConfig.siteName}
+  description={siteConfig.defaultDescription}
+  ogImage="/og/home.png"
+  socialImageAlt="Diversio Engineering social preview"
+  currentNav="home"
+>
+  <section class="home-hero">
+    <div class="home-hero-grid">
+      <div class="home-hero-copy">
+        <h1 class="home-title">{siteConfig.siteName}</h1>
+        <p class="body-lg home-desc">
+          Engineering systems, open tools, deep docs, and writing from Diversio.
+        </p>
+        <div class="home-actions">
+          <a href={siteConfig.routes.howWeWork} class="btn btn-primary btn-md">How We Work</a>
+          <a href={siteConfig.routes.tools} class="btn btn-secondary btn-md">Explore {siteConfig.toolsSectionName}</a>
+          <a href={siteConfig.githubUrl} class="btn btn-secondary btn-md" target="_blank" rel="noopener noreferrer" aria-label="DiversioTeam on GitHub">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+            </svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="home-summary-card">
+        <div class="summary-header">
+          <span class="label-caps">At a glance</span>
+          <span class="code-text-sm summary-id">OVERVIEW</span>
+        </div>
+        <div class="summary-grid">
+          <div class="summary-stat">
+            <span class="summary-stat-num">{metrics.pluginCount}</span>
+            <span class="label-caps summary-stat-label">Plugins</span>
+          </div>
+          <div class="summary-stat">
+            <span class="summary-stat-num">{metrics.piPackageCount}</span>
+            <span class="label-caps summary-stat-label">Pi Packages</span>
+          </div>
+          <div class="summary-stat">
+            <span class="summary-stat-num">{metrics.totalSkills}</span>
+            <span class="label-caps summary-stat-label">Skills</span>
+          </div>
+          <div class="summary-stat">
+            <span class="summary-stat-num">{summaryWritingValue}</span>
+            <span class="label-caps summary-stat-label">{summaryWritingLabel}</span>
+          </div>
+        </div>
+        <div class="summary-note body-md">
+          Systems thinking, open tools, and engineering writing in one place.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <SectionHeader
+      label="Sections"
+      title="Explore the site"
+      description="Start with how we work, explore key systems, browse the tools, or read the blog."
+      variant="hub"
+    />
+    <div class="site-map">
+      <a href={siteEntryPoints.howWeWork.href} class="site-map-feature">
+        <div class="site-map-feature-header">
+          <span class="label-caps">Featured path</span>
+          <span class="code-text-sm">standards · approach</span>
+        </div>
+        <h3 class="headline-md site-map-feature-title">{siteEntryPoints.howWeWork.title}</h3>
+        <p class="body-md site-map-feature-copy">
+          {siteEntryPoints.howWeWork.description}
+        </p>
+        <span class="label-caps site-map-link">{siteEntryPoints.howWeWork.cta} →</span>
+      </a>
+
+      <div class="site-map-list">
+        <a href={siteEntryPoints.systems.href} class="site-map-row">
+          <div class="site-map-row-meta">
+            <span class="code-text-sm">01</span>
+            <span class="label-caps">{metrics.stackLayerCount} stack layers · {metrics.systemsHighlightCount} highlights</span>
+          </div>
+          <div class="site-map-row-body">
+            <h3 class="headline-sm">{siteEntryPoints.systems.title}</h3>
+            <p class="body-md">{siteEntryPoints.systems.description}</p>
+          </div>
+          <span class="label-caps site-map-link">{siteEntryPoints.systems.cta} →</span>
+        </a>
+
+        <a href={siteEntryPoints.tools.href} class="site-map-row">
+          <div class="site-map-row-meta">
+            <span class="code-text-sm">02</span>
+            <span class="label-caps">{metrics.pluginCount} plugins · {metrics.totalSkills} skills</span>
+          </div>
+          <div class="site-map-row-body">
+            <h3 class="headline-sm">{siteEntryPoints.tools.title}</h3>
+            <p class="body-md">{siteEntryPoints.tools.description}</p>
+          </div>
+          <span class="label-caps site-map-link">{siteEntryPoints.tools.cta} →</span>
+        </a>
+
+        <a href={siteEntryPoints.blog.href} class="site-map-row">
+          <div class="site-map-row-meta">
+            <span class="code-text-sm">03</span>
+            <span class="label-caps">{writingMeta}</span>
+          </div>
+          <div class="site-map-row-body">
+            <h3 class="headline-sm">{siteEntryPoints.blog.title}</h3>
+            <p class="body-md">{siteEntryPoints.blog.description}</p>
+          </div>
+          <span class="label-caps site-map-link">{siteEntryPoints.blog.cta} →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {featuredWritingPost && (
+    <section class="page-section">
+      <SectionHeader
+        label="Featured Writing"
+        title="From the blog"
+        description="One highlighted article from Diversio Engineering."
+        variant="blog"
+      />
+      <article class="latest-post-card">
+        <div class="latest-post-meta">
+          <span class={`label-caps latest-post-kind${featuredWritingPost.data.sourceType === "repost" ? " latest-post-kind--repost" : ""}`}>
+            {featuredWritingPost.data.sourceType === "repost" ? "Curated repost" : "Original post"}
+          </span>
+          <span class="code-text-sm latest-post-date">{formatEditorialDate(featuredWritingPost.data.publishDate, "short")}</span>
+        </div>
+        <div class="latest-post-body">
+          <div class="latest-post-copy">
+            <h2 class="headline-md latest-post-title">
+              <a href={`/blog/${getPostSlug(featuredWritingPost)}`}>{featuredWritingPost.data.title}</a>
+            </h2>
+            <p class="body-md latest-post-summary">{featuredWritingPost.data.summary}</p>
+            <div class="latest-post-footer body-md">
+              <a href={getAuthorHref(featuredWritingPost.data.author.name)} class="latest-post-author-link">{featuredWritingPost.data.author.name}</a>
+              <span aria-hidden="true">·</span>
+              <span>{featuredWritingPost.data.sourceType === "repost" ? "Curated repost" : "Original post"}</span>
+            </div>
+          </div>
+          <div class="latest-post-actions">
+            <a href={`/blog/${getPostSlug(featuredWritingPost)}`} class="btn btn-primary btn-md">Read the article</a>
+          </div>
+        </div>
+      </article>
+    </section>
+  )}
+
+  <section class="page-section">
+    <div class="catalog-header">
+      <SectionHeader
+        label={siteConfig.toolsSectionName}
+        title="Featured tools"
+        description="A few standout projects from Agentic Tools."
+        variant="tools"
+      />
+      <a href={siteConfig.routes.registry} class="catalog-view-all label-caps">View full registry →</a>
+    </div>
+    <CardGrid cols={3}>
+      {featuredTools.map((tool) => (
+        <Card
+          category={tool.category}
+          packageId={tool.name}
+          title={tool.title}
+          description={tool.description}
+          version={tool.version}
+          runtimes={["CC", "CODEX"]}
+          href={`/docs/${tool.name}`}
+        />
+      ))}
+    </CardGrid>
+  </section>
+
+  <section class="page-section page-section--top-border">
+    <SectionHeader
+      label="Open Source"
+      title="A few more open source projects"
+      description="A small curated set of open source repos from Diversio Engineering beyond the Agentic Tools registry."
+      variant="hub"
+    />
+    <div class="project-grid">
+      {openSourceProjects.map((project) => (
+        <a href={project.url} class="project-card" target="_blank" rel="noopener">
+          <div class="project-card-header">
+            <span class="label-caps project-category">{project.category}</span>
+            <span class="code-text-sm project-repo">{project.repo}</span>
+          </div>
+          <div class="project-card-body">
+            <h3 class="headline-sm project-title">{project.name}</h3>
+            <p class="body-md project-copy">{project.description}</p>
+            <span class="label-caps project-link">Open on GitHub →</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .home-hero,
+  .page-section {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--space-3xl) var(--space-margin);
+  }
+
+  .page-section + .page-section {
+    border-top: var(--border-hairline);
+  }
+
+  .home-hero {
+    position: relative;
+  }
+
+  .home-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, var(--grid-pattern-color) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-pattern-color) 1px, transparent 1px);
+    background-size: var(--grid-pattern-size) var(--grid-pattern-size);
+    pointer-events: none;
+    opacity: 0.5;
+    z-index: 0;
+  }
+
+  .home-hero-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  @media (min-width: 1200px) {
+    .home-hero-grid {
+      grid-template-columns: 3fr 2fr;
+      align-items: start;
+    }
+  }
+
+  .home-hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .home-title {
+    font-family: var(--font-headline);
+    font-size: clamp(2.5rem, 4vw, var(--text-headline-xl));
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-headline);
+    letter-spacing: var(--tracking-headline);
+    color: var(--color-text);
+    text-wrap: balance;
+    max-width: 12ch;
+  }
+
+  .home-desc {
+    color: var(--color-text-secondary);
+    max-width: 42rem;
+  }
+
+  .home-actions {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+
+  .home-summary-card {
+    background: var(--color-surface);
+    border: var(--border-hairline);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-block);
+    overflow: hidden;
+  }
+
+  .summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-xs) var(--space-md);
+    background: var(--color-surface-low);
+    border-bottom: var(--border-hairline);
+  }
+
+  .summary-id {
+    color: var(--color-text-muted);
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+  }
+
+  .summary-stat {
+    border: var(--border-hairline);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    background: var(--color-surface-low);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+  }
+
+  .summary-stat-num {
+    font-family: var(--font-headline);
+    font-size: var(--text-headline-lg);
+    color: var(--color-primary);
+    line-height: 1;
+  }
+
+  .summary-stat-label {
+    color: var(--color-text-secondary);
+  }
+
+  .summary-note {
+    color: var(--color-text-secondary);
+    padding: 0 var(--space-lg) var(--space-lg);
+  }
+
+  .site-map {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .site-map-feature,
+  .site-map-row {
+    background: var(--color-surface);
+    border: var(--border-hairline);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-block-sm);
+    text-decoration: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast), background var(--transition-fast);
+  }
+
+  .site-map-feature:hover,
+  .site-map-row:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-block);
+    transform: translateY(-1px);
+  }
+
+  .site-map-feature {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: clamp(var(--space-lg), 2vw + 0.75rem, var(--space-2xl));
+    background: linear-gradient(180deg, var(--color-surface), color-mix(in srgb, var(--color-primary-container) 28%, var(--color-surface)));
+  }
+
+  .site-map-feature-header,
+  .site-map-row-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--color-text-muted);
+    min-width: 0;
+  }
+
+  .site-map-feature-title {
+    margin: 0;
+    max-width: 14ch;
+    text-wrap: balance;
+  }
+
+  .site-map-feature-copy,
+  .site-map-row-body p {
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .site-map-list {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .site-map-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+  }
+
+  .site-map-row-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    min-width: 0;
+  }
+
+  .site-map-row-body h3 {
+    margin: 0;
+  }
+
+  .site-map-link {
+    color: var(--color-primary);
+  }
+
+  @media (min-width: 1100px) {
+    .site-map {
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+      align-items: stretch;
+    }
+
+    .site-map-list {
+      gap: var(--space-lg);
+    }
+
+    .site-map-row {
+      grid-template-columns: 10rem minmax(0, 1fr) auto;
+      align-items: start;
+      gap: var(--space-lg);
+    }
+
+    .site-map-row-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      padding-top: 0.15rem;
+    }
+  }
+
+  .text-link,
+  .catalog-view-all {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  .text-link:hover,
+  .catalog-view-all:hover {
+    text-decoration: underline;
+  }
+
+  .latest-post-card {
+    background: linear-gradient(180deg, var(--color-surface), var(--color-surface-low));
+    border: var(--border-hairline);
+    border-radius: 1.25rem;
+    padding: clamp(var(--space-lg), 2vw + 0.75rem, var(--space-2xl));
+    box-shadow: var(--shadow-block-sm);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .latest-post-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-block);
+    transform: translateY(-1px);
+  }
+
+  .latest-post-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-md);
+  }
+
+  .latest-post-kind {
+    color: var(--color-primary);
+    padding: 0.35rem 0.65rem;
+    border: var(--border-hairline);
+    border-radius: 999px;
+    background: var(--color-primary-container);
+  }
+
+  .latest-post-kind--repost {
+    color: var(--color-accent);
+    background: var(--color-accent-container);
+  }
+
+  .latest-post-date {
+    color: var(--color-text-muted);
+  }
+
+  .latest-post-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .latest-post-title {
+    margin-bottom: var(--space-md);
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+
+  .latest-post-title a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .latest-post-title a:hover {
+    color: var(--color-primary);
+  }
+
+  .latest-post-summary,
+  .latest-post-footer {
+    color: var(--color-text-secondary);
+  }
+
+  .latest-post-author-link {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+  }
+
+  .latest-post-author-link:hover {
+    color: var(--color-primary);
+  }
+
+  .catalog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-xl);
+  }
+
+  .page-section--top-border {
+    border-top: var(--border-hairline);
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  @media (min-width: 700px) {
+    .project-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .project-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .project-card {
+    background: var(--color-surface);
+    border: var(--border-hairline);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-block-sm);
+    text-decoration: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-card:hover,
+  .project-card:focus-visible {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-block);
+    transform: translateY(-1px);
+  }
+
+  .project-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-sm);
+    min-width: 0;
+    padding: var(--space-xs) var(--space-md);
+    background: var(--color-surface-low);
+    border-bottom: var(--border-hairline);
+  }
+
+  .project-category {
+    color: var(--color-text-secondary);
+  }
+
+  .project-repo {
+    color: var(--color-text-muted);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .project-card-body {
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    height: 100%;
+  }
+
+  .project-title {
+    color: var(--color-text);
+  }
+
+  .project-copy {
+    color: var(--color-text-secondary);
+  }
+
+  .project-link {
+    color: var(--color-primary);
+    margin-top: auto;
+  }
+
+  @media (max-width: 860px) {
+    .home-hero,
+    .page-section {
+      padding: var(--space-2xl) var(--space-md);
+    }
+
+    .home-hero-grid {
+      gap: var(--space-lg);
+    }
+
+    .home-actions > .btn,
+    .latest-post-actions > .btn {
+      width: 100%;
+    }
+
+    .summary-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .summary-stat {
+      padding: var(--space-sm) var(--space-md);
+    }
+
+    .catalog-header,
+    .latest-post-meta,
+    .latest-post-footer,
+    .site-map-feature-header,
+    .site-map-row-meta,
+    .project-card-header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .project-repo {
+      white-space: normal;
+      text-align: left;
+    }
+
+    .latest-post-title,
+    .site-map-feature-title {
+      max-width: none;
+    }
+  }
+
+  @media (min-width: 860px) {
+    .latest-post-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: var(--space-xl);
+    }
+  }
+</style>

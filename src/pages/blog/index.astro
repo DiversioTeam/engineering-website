@@ -1,0 +1,421 @@
+---
+// Blog index for the engineering hub.
+//
+// Why this page exists:
+// - engineering writing needs a first-class home alongside the tools section
+// - original posts should be easy to publish from markdown
+// - curated reposts should be visible, but clearly labeled and attributable
+//
+// This page intentionally handles both post types in one list so readers do not
+// have to learn two different content surfaces.
+//
+// How the list works:
+//   1. Collect all blog posts that are not drafts
+//   2. Sort by publishDate descending (newest first)
+//   3. Split originals vs reposts so hero copy stays truthful
+//   4. Render each post as a card with source type label and source credit
+//
+// The hero copy changes based on what is actually published:
+//   originals only         -> original-post framing
+//   reposts only           -> curated-repost framing
+//   originals + reposts    -> mixed editorial framing
+import PageLayout from "../../layouts/PageLayout.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import { formatEditorialDate } from "../../utils/format-date";
+import { getAuthorHref, summarizeAuthors } from "../../utils/authors";
+import { pickFeaturedBlogPost } from "../../utils/pick-featured-blog-post";
+import { getPublishedBlogPosts } from "../../utils/blog-posts";
+import { siteConfig } from "../../../site.config.mjs";
+
+const posts = await getPublishedBlogPosts();
+const originalPosts = posts.filter((post) => post.data.sourceType === "original");
+const reposts = posts.filter((post) => post.data.sourceType === "repost");
+const hasOriginalPosts = originalPosts.length > 0;
+const hasReposts = reposts.length > 0;
+const blogDescription = hasOriginalPosts && hasReposts
+  ? "Original posts, selected reposts, and engineering writing from Diversio Engineering."
+  : hasOriginalPosts
+    ? "Original posts, updates, and technical writing from Diversio Engineering."
+    : hasReposts
+      ? "Selected reposts and engineering writing relevant to Diversio Engineering."
+      : "Engineering writing from Diversio Engineering.";
+const authors = summarizeAuthors(posts.map((post) => post.data.author));
+const featuredPost = pickFeaturedBlogPost(posts);
+const remainingPosts = posts.filter((post) => post.id !== featuredPost?.id);
+
+function getPostSlug(post: { id: string; data: { slug?: string } }) {
+  return (post.data.slug ?? post.id).replace(/\.md$/, "");
+}
+---
+
+<PageLayout
+  title={siteConfig.blogSectionName}
+  description={blogDescription}
+  ogImage="/og/blog-index.png"
+  socialImageAlt="Engineering blog social preview"
+  currentNav="blog"
+>
+  <section class="page-section page-hero">
+    <SectionHeader
+      label={siteConfig.blogSectionName}
+      title="Engineering writing"
+      titleLevel="h1"
+      description={hasOriginalPosts && hasReposts
+        ? "Notes, case studies, original posts, and selected reposts from Diversio Engineering."
+        : hasOriginalPosts
+          ? "Original posts, updates, and technical writing from Diversio Engineering."
+          : hasReposts
+            ? "Selected reposts and engineering writing relevant to Diversio Engineering."
+            : "Technical writing from Diversio Engineering."
+      }
+      variant="blog"
+    />
+    {authors.length > 0 && (
+      <div class="authors-inline">
+        <span class="label-caps authors-inline-label">Authors</span>
+        <div class="authors-inline-links">
+          {authors.map((author) => (
+            <a href={getAuthorHref(author.name)} class="authors-inline-link">
+              {author.name}
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+  </section>
+
+  <section class="page-section blog-main-section">
+    {posts.length > 0 ? (
+      <>
+        {featuredPost && (() => {
+          const href = `/blog/${getPostSlug(featuredPost)}`;
+          const isRepost = featuredPost.data.sourceType === "repost";
+          return (
+            <article class="featured-post">
+              <div class="featured-post-meta">
+                <span class={`label-caps post-kind${isRepost ? " post-kind--repost" : ""}`}>
+                  {isRepost ? "Curated repost" : "Original post"}
+                </span>
+                <time class="code-text-sm post-date" datetime={featuredPost.data.publishDate.toISOString()}>
+                  {formatEditorialDate(featuredPost.data.publishDate, "long")}
+                </time>
+              </div>
+              <div class="featured-post-body">
+                <div class="featured-post-copy">
+                  <h2 class="featured-post-title"><a href={href}>{featuredPost.data.title}</a></h2>
+                  <p class="featured-post-summary">{featuredPost.data.summary}</p>
+                  <div class="featured-post-footer">
+                    <a href={getAuthorHref(featuredPost.data.author.name)} class="body-md post-author post-author-link">
+                      {featuredPost.data.author.name}
+                    </a>
+                    {isRepost && featuredPost.data.sourceSiteName && (
+                      <span class="code-text-sm post-source">Source: {featuredPost.data.sourceSiteName}</span>
+                    )}
+                  </div>
+                </div>
+                <div class="featured-post-actions">
+                  <a href={href} class="btn btn-primary btn-md">Read article</a>
+                </div>
+              </div>
+            </article>
+          );
+        })()}
+
+        {remainingPosts.length > 0 && (
+          <div class="posts-grid">
+            {remainingPosts.map((post) => {
+              const href = `/blog/${getPostSlug(post)}`;
+              const isRepost = post.data.sourceType === "repost";
+              return (
+                <article class="post-card">
+                  <div class="post-meta-row">
+                    <span class={`label-caps post-kind${isRepost ? " post-kind--repost" : ""}`}>
+                      {isRepost ? "Curated repost" : "Original post"}
+                    </span>
+                    <time class="code-text-sm post-date" datetime={post.data.publishDate.toISOString()}>
+                      {formatEditorialDate(post.data.publishDate, "short")}
+                    </time>
+                  </div>
+                  <h2 class="headline-sm"><a href={href}>{post.data.title}</a></h2>
+                  <p class="body-md post-summary">{post.data.summary}</p>
+                  <div class="post-footer">
+                    <a href={getAuthorHref(post.data.author.name)} class="body-md post-author post-author-link">
+                      {post.data.author.name}
+                    </a>
+                    {isRepost && post.data.sourceSiteName && (
+                      <span class="code-text-sm post-source">Source: {post.data.sourceSiteName}</span>
+                    )}
+                  </div>
+                  <span class="label-caps post-card-link">Read article →</span>
+                </article>
+              );
+            })}
+          </div>
+        )}
+      </>
+    ) : (
+      <div class="empty-state">
+        <h2 class="headline-sm">No posts published yet</h2>
+        <p class="body-md empty-copy">
+          We&apos;re preparing the first posts for this section. Check back soon for updates from Diversio Engineering.
+        </p>
+      </div>
+    )}
+  </section>
+</PageLayout>
+
+<style>
+  .page-section {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-margin) var(--space-3xl);
+  }
+
+  .page-hero {
+    padding-top: var(--space-3xl);
+  }
+
+  .page-section + .page-section {
+    border-top: var(--border-hairline);
+    padding-top: var(--space-3xl);
+  }
+
+  .authors-inline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: calc(-1 * var(--space-sm));
+    margin-bottom: var(--space-xl);
+  }
+
+  .blog-main-section {
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  .authors-inline-label {
+    color: var(--color-primary);
+  }
+
+  .authors-inline-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+
+  .authors-inline-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.6rem;
+    border: var(--border-hairline);
+    border-radius: 999px;
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+  }
+
+  .authors-inline-link:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .featured-post,
+  .posts-grid {
+    display: grid;
+    gap: var(--space-lg);
+  }
+
+  .featured-post {
+    background: linear-gradient(180deg, var(--color-surface), var(--color-surface-low));
+    border: var(--border-hairline);
+    border-radius: 1.25rem;
+    padding: clamp(var(--space-lg), 2vw + 0.75rem, var(--space-2xl));
+    box-shadow: var(--shadow-block-sm);
+  }
+
+  .featured-post-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-md);
+  }
+
+  .featured-post-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .featured-post-title {
+    margin: 0 0 var(--space-md);
+    font-size: clamp(1.9rem, 2rem + 0.5vw, 2.9rem);
+    line-height: 1.05;
+    text-wrap: balance;
+    max-width: 18ch;
+  }
+
+  .featured-post-title a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .featured-post-title a:hover {
+    color: var(--color-primary);
+  }
+
+  .featured-post-summary {
+    max-width: 48rem;
+    color: var(--color-text-secondary);
+    font-size: clamp(1.06rem, 1rem + 0.22vw, 1.2rem);
+    line-height: 1.72;
+    margin: 0;
+  }
+
+  .featured-post-footer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    margin-top: var(--space-lg);
+  }
+
+  .featured-post-actions {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .posts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 860px) {
+    .featured-post-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: var(--space-xl);
+    }
+
+    .posts-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .post-card,
+  .empty-state {
+    background: var(--color-surface);
+    border: var(--border-hairline);
+    border-radius: 1rem;
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-block-sm);
+  }
+
+  .post-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .post-meta-row,
+  .post-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .post-kind {
+    color: var(--color-primary);
+  }
+
+  .post-kind--repost {
+    color: var(--color-accent);
+  }
+
+  .post-date,
+  .post-source,
+  .post-author,
+  .empty-copy {
+    color: var(--color-text-secondary);
+  }
+
+  .post-author-link {
+    text-decoration: none;
+  }
+
+  .post-author-link:hover {
+    color: var(--color-primary);
+  }
+
+  .post-card h2 {
+    margin: var(--space-sm) 0;
+    text-wrap: balance;
+    font-size: 1.35rem;
+    line-height: 1.2;
+  }
+
+  .post-card h2 a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .post-card h2 a:hover {
+    color: var(--color-primary);
+  }
+
+  .post-summary {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-md);
+    line-height: 1.65;
+  }
+
+  .post-footer {
+    margin-top: auto;
+  }
+
+  .post-card-link {
+    color: var(--color-primary);
+    margin-top: var(--space-sm);
+  }
+
+  .empty-state code {
+    font-family: var(--font-code);
+    font-size: var(--text-code-sm);
+    background: var(--color-surface-low);
+    padding: 1px 6px;
+    border-radius: var(--radius-sm);
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 860px) {
+    .page-section {
+      padding: 0 var(--space-md) var(--space-2xl);
+    }
+
+    .page-hero,
+    .page-section + .page-section {
+      padding-top: var(--space-2xl);
+    }
+
+    .authors-inline,
+    .featured-post-meta,
+    .featured-post-footer,
+    .post-meta-row,
+    .post-footer {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .featured-post-title {
+      max-width: none;
+    }
+
+    .featured-post-actions > .btn {
+      width: 100%;
+    }
+  }
+</style>

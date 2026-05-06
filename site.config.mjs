@@ -1,0 +1,48 @@
+// Central website configuration.
+//
+// Why this file exists:
+// - brand/domain strings were starting to drift across layouts, pages, and docs
+// - the site is no longer a single landing page; it now has multiple sections
+// - future changes like a hostname move or nav rename should happen in one place
+//
+// Mental model:
+// - content pages decide *what they say*
+// - this file decides *what the site is called*, *where sections live*, and
+//   *which public GitHub destination a shared UI link should use*
+//
+// If you rename a section or move a top-level route, update this file first,
+// then update any page copy that refers to the old name.
+export const siteConfig = {
+  siteName: "Diversio Engineering",
+  siteUrl: "https://engineering.diversio.com",
+  toolsSectionName: "Agentic Tools",
+  blogSectionName: "Blog",
+  githubUrl: "https://github.com/DiversioTeam",
+  githubRepoUrl: "https://github.com/DiversioTeam/agent-skills-marketplace",
+  defaultDescription:
+    "Diversio Engineering shares engineering systems, open tools, deep docs, and writing.",
+  routes: {
+    home: "/",
+    howWeWork: "/how-we-work",
+    systems: "/systems",
+    tools: "/agentic-tools",
+    docs: "/docs",
+    registry: "/registry",
+    skills: "/skills",
+    pi: "/pi",
+    blog: "/blog",
+    community: "/community",
+    security: "/security",
+    terms: "/terms",
+  },
+  navItems: [
+    { label: "Home", href: "/", key: "home" },
+    { label: "How We Work", href: "/how-we-work", key: "howWeWork" },
+    { label: "Systems", href: "/systems", key: "systems" },
+    { label: "Agentic Tools", href: "/agentic-tools", key: "tools" },
+    { label: "Blog", href: "/blog", key: "blog" },
+    { label: "Community", href: "/community", key: "community" },
+  ],
+};
+
+export default siteConfig;

@@ -21,6 +21,17 @@ export interface Props {
   socialType?: "website" | "article";
   ogImageWidth?: number;
   ogImageHeight?: number;
+
+  // Optional robots directive.
+  //
+  // Why this exists:
+  // - most pages should be indexable by default
+  // - some pages, like draft-review URLs, should be easy to share privately
+  //   without being indexed or archived
+  //
+  // Example:
+  //   robots="noindex, nofollow, noarchive"
+  robots?: string;
 }
 
 const siteName = siteConfig.siteName;
@@ -35,6 +46,7 @@ const {
   socialType = "website",
   ogImageWidth = 1200,
   ogImageHeight = 630,
+  robots,
 } = Astro.props;
 
 const fullTitle = title === siteName ? siteName : `${title} | ${siteName}`;
@@ -56,6 +68,7 @@ const ogImageType = ogImage.endsWith(".png")
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{fullTitle}</title>
   <meta name="description" content={description} />
+  {robots && <meta name="robots" content={robots} />}
   <meta name="theme-color" content="#5B34E9" />
 
   <!-- Open Graph -->

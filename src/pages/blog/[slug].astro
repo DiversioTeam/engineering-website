@@ -352,6 +352,69 @@ const visibleHeroImage = post.data.heroImage;
     color: var(--color-text-secondary);
   }
 
+  /*
+    Reusable AI writing disclaimer.
+
+    Why this exists:
+    - some posts use AI in narrow, explicit ways (proofreading, link gathering, SVG generation)
+    - we want that disclosure to be visible, but not styled like core article content
+    - authors should be able to reuse one small HTML block across posts while changing only the copy
+
+    Authoring pattern (inside markdown):
+
+      <div class="ai-disclaimer">
+        <p class="ai-disclaimer-title">AI writing disclaimer</p>
+        <ul>
+          <li>Verified for typos using ...</li>
+          <li>Links were gathered with the help of ...</li>
+          <li>SVGs were generated using ...</li>
+        </ul>
+      </div>
+  */
+  .post-content :global(.ai-disclaimer) {
+    margin: var(--space-2xl) 0 0;
+    padding: var(--space-md) 0 0;
+    border-top: var(--border-hairline);
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-body-md);
+    line-height: var(--leading-body-sm);
+  }
+
+  .post-content :global(.ai-disclaimer-title) {
+    margin: 0 0 var(--space-xs);
+    color: var(--color-text-secondary);
+    font-family: var(--font-body);
+    font-size: var(--text-label);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .post-content :global(.ai-disclaimer ul) {
+    margin: 0;
+    padding-left: 1.15rem;
+  }
+
+  .post-content :global(.ai-disclaimer li) {
+    margin-top: 0.35rem;
+  }
+
+  .post-content :global(.ai-disclaimer p),
+  .post-content :global(.ai-disclaimer li),
+  .post-content :global(.ai-disclaimer strong),
+  .post-content :global(.ai-disclaimer em),
+  .post-content :global(.ai-disclaimer code) {
+    color: inherit;
+  }
+
+  .post-content :global(.ai-disclaimer code) {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    font-size: 0.95em;
+  }
+
   .post-hero {
     margin: 0 0 var(--space-2xl);
     overflow: hidden;

@@ -17,6 +17,7 @@ export interface Props {
   socialType?: "website" | "article";
   ogImageWidth?: number;
   ogImageHeight?: number;
+  robots?: string;
   currentNav?: HeaderNavKey;
 }
 
@@ -31,6 +32,7 @@ const {
   socialType,
   ogImageWidth,
   ogImageHeight,
+  robots,
   currentNav,
 } = Astro.props;
 ---
@@ -45,6 +47,7 @@ const {
   {socialType}
   {ogImageWidth}
   {ogImageHeight}
+  {robots}
 >
   <Header currentNav={currentNav} />
   <main>

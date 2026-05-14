@@ -21,7 +21,8 @@ If you need to make a routine change to the engineering site, start here. This g
 | Featured tools on homepage | `src/data/agentic-tools.ts` → `homepageFeaturedPluginSlugs` | Array of plugin slugs |
 | Featured tools on `/agentic-tools` | `src/data/agentic-tools.ts` → `toolsPageFeaturedPluginSlugs` | |
 | A new blog post | `src/content/blog/<slug>.md` | See `README.md` for frontmatter schema |
-| A review-only draft blog URL | `src/content/blog/<slug>.md` → `draft: true` + `previewToken: ...` | Builds at `/blog/review/<previewToken>/<slug>/` without appearing on `/blog` |
+| A review-only draft blog URL | `src/content/blog/<slug>.md` → `draft: true` + `previewToken: ...` | Builds at `/blog/review/<previewToken>/<slug>/` without appearing on `/blog`; token should be lowercase words/ids with hyphen separators |
+| A future-dated scheduled post | `src/content/blog/<slug>.md` → future `publishDate` | Builds at normal `/blog/<slug>/`, shows a restricted preview until that date, and stays out of `/blog` until a fresh deploy |
 | The AI writing disclaimer block | Blog markdown HTML block | Use the reusable `.ai-disclaimer` snippet documented in `README.md` |
 | Blog ordering / featured post | `src/content/blog/<slug>.md` → `featured: true` | Only one post at a time; logic in `utils/pick-featured-blog-post.ts` |
 | Author page content | Derived from blog frontmatter `author.name` | Pages auto-generated from `src/pages/authors/` |

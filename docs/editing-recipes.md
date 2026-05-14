@@ -182,9 +182,31 @@ Result:
   - `/blog/review/<previewToken>/<slug>/`
 
 Rules:
-- `previewToken` should use lowercase letters, numbers, and hyphens only
+- `previewToken` should use lowercase letters, numbers, and single hyphen separators only
+- use a real token, not placeholder punctuation like `--------`
 - preview pages are for review workflows, not public publishing
 - preview pages are marked `noindex, nofollow, noarchive`
+
+## Schedule a blog post for a future publish date
+
+Edit:
+- `src/content/blog/<slug>.md`
+
+Set:
+
+```yaml
+publishDate: 2026-05-20
+```
+
+Behavior:
+- the post gets its normal article URL at `/blog/<slug>/`
+- the post stays out of `/blog` and author/archive surfaces until it is published
+- before that date, the page shows a restricted preview instead of the full article body
+- on or after that date, the full article unlocks in the viewer's local timezone
+
+Important static-site note:
+- list pages like `/blog` are still generated at build time
+- that means a fresh deploy is what makes the post appear in list surfaces after the date passes
 
 ## Add the reusable AI writing disclaimer
 

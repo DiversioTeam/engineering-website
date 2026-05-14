@@ -98,10 +98,15 @@ const blog = defineCollection({
       // Why keep this token simple?
       // - it becomes part of the URL path
       // - lowercase + digits + hyphens are easy to read, copy, and type
+      // - we still require at least one alphanumeric segment so tokens are not
+      //   just placeholder punctuation like `--------`
       previewToken: z
         .string()
         .min(8)
-        .regex(/^[a-z0-9-]+$/, "previewToken must be lowercase letters, numbers, and hyphens only.")
+        .regex(
+          /^(?=.*[a-z0-9])[a-z0-9]+(?:-[a-z0-9]+)*$/,
+          "previewToken must use lowercase letters, numbers, and single hyphen separators, with at least one alphanumeric character.",
+        )
         .optional(),
     })
     .superRefine((data, ctx) => {

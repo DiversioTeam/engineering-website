@@ -1,187 +1,80 @@
 # AGENTS.md — Diversio Engineering Website
 
-Astro static site deployed to Cloudflare Pages at `engineering.diversio.com`.
-Built from this repo. Agentic Tools content comes from
-`DiversioTeam/agent-skills-marketplace` at build time.
+## What This Repo Is
 
-## Quick orientation
+Astro static site for `engineering.diversio.com`. This repo renders and deploys
+all public pages. Agentic Tools content is source-owned by
+`DiversioTeam/agent-skills-marketplace` and resolved here at build time.
 
-```
-engineering-website/                  ← you are here (builds + deploys everything)
-├── src/pages/                        ← .astro page templates
-├── src/data/                         ← structured content (.ts + marketplace.json)
-├── src/content/blog/                 ← blog posts (Markdown frontmatter)
-├── src/components/                   ← shared UI (.astro)
-├── src/layouts/                      ← page shells
-├── src/utils/                        ← helpers (blog, metrics, OG, dates)
-├── public/                           ← static assets (logos, OG images, redirects)
-├── docs/                             ← maintainer docs (the human/agent manual)
-├── scripts/                          ← checkout-asm.sh, generate-og-images.py
-├── .github/workflows/                ← validate + deploy CI
-├── site.config.mjs                   ← site identity (name, URLs, nav, GitHub links)
-├── agent-skills-source.ref           ← pinned ASM SHA (lock file)
-└── astro.config.mjs                  ← Astro config
+## How to Navigate This Repo
+
+- Start here for commands and hard repo rules.
+- Read `docs/maintainer-quickstart.md` for the fastest file-targeting guide.
+- Read `docs/architecture/overview.md` for the split-repo model and core code paths.
+- Read `docs/quality/gates.md` for build gates, CI jobs, and recurring failures.
+- Read `docs/runbooks/development.md` for everyday workflows, ASM pinning, and OG generation.
+- Read `docs/runbooks/blog-authoring.md` for blog frontmatter, review URLs, and scheduled posts.
+- Read `docs/route-ownership.md`, `docs/content-governance.md`, `docs/editing-recipes.md`, and `docs/editorial-workflow.md` when you need ownership or editorial decisions.
+
+## Repo Map
+
+```text
+engineering-website/
+├── src/pages/              Astro routes
+├── src/data/               Structured content + ASM extraction helpers
+├── src/content/blog/       Blog posts
+├── src/components/         Shared UI
+├── src/layouts/            Page shells
+├── src/utils/              Blog, metrics, OG, and content helpers
+├── public/                 Static assets and generated OG images
+├── docs/                   Maintainer docs
+├── scripts/                ASM checkout + OG helpers
+├── .github/workflows/      Validate + deploy workflows
+├── site.config.mjs         Site identity and nav
+└── agent-skills-source.ref Default ASM SHA for builds
 ```
 
 ## Commands
 
 ```bash
-# Everyday
-npm install --package-lock=false    # first time or after package.json changes
-npm run build                        # production build → dist/
-npm run dev                          # dev server at http://localhost:4321
-
-# Before every build: sync marketplace.json from ASM sibling checkout
+npm install --package-lock=false
 cp ../agent-skills-marketplace/website/src/data/marketplace.json src/data/marketplace.json
 npm run build
-
-# OG image regeneration (after content/metadata changes)
+npm run dev
 python3 scripts/generate-og-images.py && npm run build
-
-# Local CI simulation (checkout ASM at pinned SHA)
 ./scripts/checkout-asm.sh $(cat agent-skills-source.ref)
 ```
 
-## Blog-specific authoring patterns
+If the ASM repo is not available as a sibling checkout, set:
 
-### 1. Review-only draft URLs
-
-Use this when a post is not ready for `/blog` yet, but another person needs a
-real URL to review the full page.
-
-Frontmatter pattern:
-
-```yaml
----
-draft: true
-previewToken: some-review-token
----
+```bash
+export AGENT_SKILLS_REPO_DIR=/absolute/path/to/agent-skills-marketplace
 ```
 
-Result:
-- the post stays out of `/blog`
-- Astro builds a review URL at:
-  - `/blog/review/<previewToken>/<slug>/`
-- the preview page is marked `noindex, nofollow, noarchive`
+## Non-Negotiable Rules
 
-This is a review convenience, not authentication.
+- Never hand-edit `src/data/marketplace.json`. It is an untracked build artifact copied from ASM.
+- Agentic Tools docs belong in ASM (`plugins/*/skills/*/SKILL.md`, `pi-packages/*/README.md`, `pi-packages/*/skills/*/SKILL.md`).
+- Keep `agentSkillsRepoUrl` in `site.config.mjs` pointing at ASM. `/community` depends on it.
+- Only one blog post may have `featured: true` at a time.
+- Every new systems lane must also be added to `engineeringHighlightLaneOrder`.
+- Reused strings belong in `src/data/site-entry-points.ts` or another scoped data file, not duplicated across templates.
 
-### 2. AI writing disclaimer block
+## Docs Index
 
-When a post used AI in narrow, explicit ways, use the reusable disclaimer block
-at the end of the markdown body:
+- `docs/architecture/overview.md` — system boundaries, source-of-truth map, build/deploy flow
+- `docs/quality/gates.md` — required commands, CI jobs, common failures, golden rules
+- `docs/runbooks/development.md` — daily development loop, local CI simulation, lock-file updates
+- `docs/runbooks/blog-authoring.md` — original vs repost schema, draft previews, scheduled posts, AI disclaimer block
+- `docs/maintainer-quickstart.md` — fastest path from task to file
+- `docs/local-dev.md` — first-time setup and source-repo resolution
+- `docs/route-ownership.md` — exact route ownership across this repo and ASM
+- `docs/content-governance.md` — page scope, stack rules, source-of-truth decisions
+- `docs/editing-recipes.md` — direct edit recipes
+- `docs/editorial-workflow.md` — page vs post vs shared-data judgment calls
 
-```html
-<div class="ai-disclaimer">
-  <p class="ai-disclaimer-title">AI writing disclaimer</p>
-  <ul>
-    <li>Verified for typos and grammar using ...</li>
-    <li>Links or references were gathered with the help of ...</li>
-    <li>Images / SVGs / diagrams were generated using ...</li>
-  </ul>
-</div>
-```
+## Keep the Harness Fresh
 
-Why HTML instead of markdown?
-- it keeps the disclaimer visually separate from the main article prose
-- it reuses one stable styling hook across all blog posts
-- each article can change the content without changing the presentation
-
-## Doc routing — which file to read
-
-| When you need to... | Read |
-|---|---|
-| Make a routine change fast | `docs/maintainer-quickstart.md` |
-| Set up this repo from scratch | `docs/local-dev.md` |
-| Know which repo owns a route or workflow | `docs/route-ownership.md` |
-| Understand page scope, blog rules, stack provenance | `docs/content-governance.md` |
-| Find the exact file for a known change | `docs/editing-recipes.md` |
-| Decide: page edit, shared data, or blog post? | `docs/editorial-workflow.md` |
-
-## Architecture — the split-repo model
-
-```
-  engineering.diversio.com
-           │
-  ┌────────┴────────┐
-  │ engineering-     │  ← builds & deploys everything
-  │ website          │
-  └────────┬────────┘
-           │
-    ┌──────┼──────┐
-    │      │      │
-  Broad  Blog   Agentic Tools pages
-  pages  posts  /agentic-tools /registry
-                /docs/* /skills/* /pi/*
-                        ▲
-              ┌─────────┴─────────┐
-              │ agent-skills-      │  ← source of truth for tool docs
-              │ marketplace        │
-              └───────────────────┘
-```
-
-**Rule**: All pages render from this repo. Agentic Tools content (SKILL.md,
-README.md, marketplace.json) is source-owned by ASM and resolved at build time
-via `src/data/site-docs.ts` extraction from a checked-out ASM repo.
-
-## Build pipeline
-
-Every build (local and CI) follows the same sequence:
-
-1. Ensure `src/data/marketplace.json` exists (local: `cp` from sibling; CI: copy from ASM checkout)
-2. `npm install --package-lock=false`
-3. `npm run build`
-4. (CI deploy only) `wrangler pages deploy dist/`
-
-CI pinning: `agent-skills-source.ref` records the default ASM SHA. ASM merges
-to main dispatch a `repository_dispatch` event that overrides the lock file
-with the exact merged SHA.
-
-## Non-negotiable constraints
-
-- **`src/data/marketplace.json` is a build artifact.** Never hand-edit it.
-  Canonical source: `agent-skills-marketplace/website/src/data/marketplace.json`.
-- **`agentSkillsRepoUrl` in site.config.mjs must point to ASM.** It feeds
-  /community contribution links. Do not change it to engineering-website.
-- **One featured blog post at a time.** `featured: true` on at most one post.
-  Enforced by `utils/blog-posts.ts`.
-- **Systems lane order is canonical.** Adding a lane without adding it to
-  `engineeringHighlightLaneOrder` causes a build failure.
-- **Stack entries must be meaningful.** Do not turn the stack into an
-  exhaustive inventory. See `docs/content-governance.md` for the rules.
-- **No page-local flattening.** If a string appears in multiple page templates,
-  it should live in `src/data/site-entry-points.ts` or a scoped data file.
-
-## CI workflows
-
-| Workflow | Trigger | What it does |
-|---|---|---|
-| `validate-website.yml` | Push/PR touching site files | Checkout self + ASM, build, no deploy |
-| `deploy-website-cloudflare-pages.yml` | PR → preview \| push to main → production \| ASM dispatch → production \| manual | Full build + wrangler deploy |
-
-## Secrets and variables
-
-| Name | Where | Purpose |
-|---|---|---|
-| `CLOUDFLARE_API_TOKEN` | Repo secrets | wrangler deploy auth |
-| `CLOUDFLARE_ACCOUNT_ID` | Repo secrets | wrangler deploy target |
-| `CLOUDFLARE_PAGES_PROJECT` | Repo vars (optional) | Defaults to `diversio-engineering` |
-
-ASM side (in `agent-skills-marketplace`):
-- `ENGINEERING_WEBSITE_DISPATCH_TOKEN` — PAT for cross-repo dispatch
-
-## Key files to know
-
-| File | Job |
-|---|---|
-| `site.config.mjs` | Site name, routes, nav, GitHub URLs — update here first |
-| `src/data/engineering-principles.ts` | /how-we-work principles |
-| `src/data/engineering-practices.ts` | /how-we-work practice rows |
-| `src/data/engineering-highlights.ts` | /systems highlights + lane order |
-| `src/data/engineering-stack.ts` | /systems stack layers, logos, tools |
-| `src/data/site-entry-points.ts` | Shared CTA/route summary copy |
-| `src/data/agentic-tools.ts` | Featured plugin curation |
-| `src/data/site-docs.ts` | ASM extraction layer (skill/pi/doc pages) |
-| `src/utils/site-metrics.ts` | Shared counts (plugins, skills, posts, layers) |
-| `src/utils/blog-posts.ts` | Blog post loading + featured post validation |
-| `agent-skills-source.ref` | Pinned ASM SHA (one line, 40-char hex) |
+- If a failure repeats, add a focused doc update or mechanical guard.
+- If commands or workflows change, update this file and the linked source doc.
+- Prefer adding focused docs under `docs/` over growing this file into a handbook.

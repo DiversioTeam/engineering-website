@@ -100,6 +100,10 @@ Normal local work is offline-first. The only time you need network is `npm insta
 
 ## Related docs
 
-- `docs/route-ownership.md` — which repo owns each route and workflow
 - `docs/maintainer-quickstart.md` — common tasks and which files to edit
+- `docs/architecture/overview.md` — split-repo model and core code paths
+- `docs/quality/gates.md` — build gates, CI jobs, and recurring failures
+- `docs/runbooks/development.md` — everyday workflow after setup
+- `docs/runbooks/blog-authoring.md` — blog schemas and publishing patterns
+- `docs/route-ownership.md` — which repo owns each route and workflow
 - `docs/content-governance.md` — page scope and source-of-truth rules

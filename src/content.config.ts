@@ -104,7 +104,7 @@ const blog = defineCollection({
         .string()
         .min(8)
         .regex(
-          /^(?=.*[a-z0-9])[a-z0-9]+(?:-[a-z0-9]+)*$/,
+          /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
           "previewToken must use lowercase letters, numbers, and single hyphen separators, with at least one alphanumeric character.",
         )
         .optional(),

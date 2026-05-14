@@ -18,12 +18,14 @@ export type BlogPost = CollectionEntry<"blog">;
 //     -> gets a direct article URL, but stays off lists until the date is reached
 //   live post
 //     -> appears everywhere normal blog content appears
-export function isScheduledBlogPost(post: BlogPost, at = new Date()): boolean {
-  return !post.data.draft && post.data.publishDate.getTime() > at.getTime();
+export function isScheduledBlogPost(post: BlogPost, at?: Date): boolean {
+  const effectiveAt = at ?? new Date();
+  return !post.data.draft && post.data.publishDate.getTime() > effectiveAt.getTime();
 }
 
-export function isPublishedBlogPost(post: BlogPost, at = new Date()): boolean {
-  return !post.data.draft && !isScheduledBlogPost(post, at);
+export function isPublishedBlogPost(post: BlogPost, at?: Date): boolean {
+  const effectiveAt = at ?? new Date();
+  return !post.data.draft && !isScheduledBlogPost(post, effectiveAt);
 }
 
 export async function getPublishedBlogPosts(): Promise<BlogPost[]> {

@@ -1,6 +1,7 @@
 ---
 import { formatEditorialDate } from "../utils/format-date";
 import { getAuthorHref } from "../utils/authors";
+import type { BlogPost } from "../utils/blog-posts";
 
 // Shared blog article chrome.
 //
@@ -21,11 +22,11 @@ import { getAuthorHref } from "../utils/authors";
 //   </BlogPostArticle>
 
 export interface Props {
-  post: any;
+  post: BlogPost;
   hasToc: boolean;
   tocHeadings: Array<{ depth: number; slug: string; text: string }>;
   readingMinutes: number;
-  relatedPosts: any[];
+  relatedPosts: BlogPost[];
   visibleHeroImage?: string;
   kindLabel: string;
   kindClassName?: string;
@@ -36,6 +37,8 @@ export interface Props {
   isScheduledAtBuild?: boolean;
   scheduledDateLabel?: string;
   scheduledDateParts?: { year: number; month: number; day: number };
+  publishedKindLabel?: string;
+  publishedKindClassName?: string;
 }
 
 const {
@@ -54,6 +57,8 @@ const {
   isScheduledAtBuild = false,
   scheduledDateLabel,
   scheduledDateParts,
+  publishedKindLabel = kindLabel,
+  publishedKindClassName = kindClassName,
 } = Astro.props;
 
 const isRepost = post.data.sourceType === "repost";
@@ -62,7 +67,7 @@ const isRepost = post.data.sourceType === "repost";
 <section class="post-shell">
   <div class:list={["post-layout", !hasToc && "post-layout--no-toc"]}>
     <article class="post-main">
-      {bannerLabel && bannerCopy && (
+      {bannerLabel && (bannerCopy || isScheduledAtBuild) && (
         <div class:list={["post-mode-banner", isScheduledAtBuild && "post-mode-banner--scheduled"]} data-scheduled-preview={isScheduledAtBuild || undefined}>
           <span class="label-caps post-mode-label">{bannerLabel}</span>
           <p class="body-md post-mode-copy">
@@ -84,7 +89,8 @@ const isRepost = post.data.sourceType === "repost";
             <span
               class:list={["label-caps", "post-kind", kindClassName]}
               data-post-kind={isScheduledAtBuild || undefined}
-              data-published-label={kindLabel}
+              data-published-label={publishedKindLabel}
+              data-published-kind-class={publishedKindClassName}
             >
               {kindLabel}
             </span>
@@ -204,9 +210,14 @@ const isRepost = post.data.sourceType === "repost";
     (() => {
       // Scheduled posts unlock at local midnight in the viewer's timezone.
       //
-      // This is a UX gate, not access control. The goal is to let a future post
-      // have a stable public URL while still behaving like a restricted preview
-      // until the reader reaches the publish date locally.
+      // This is a UX gate, not access control.
+      //
+      // Important limitation:
+      // - because this is a static site, the article body is still shipped in the
+      //   HTML source before the publish date
+      // - this script only controls what a normal reader sees in the rendered page
+      // - use draft preview URLs for private review, not scheduled posts, when the
+      //   article body itself must stay harder to discover
       const releaseAt = new Date(
         scheduledDateParts.year,
         scheduledDateParts.month - 1,
@@ -240,6 +251,10 @@ const isRepost = post.data.sourceType === "repost";
       if (badge instanceof HTMLElement) {
         badge.textContent = badge.dataset.publishedLabel ?? 'Original post';
         badge.classList.remove('post-kind--scheduled');
+        const publishedKindClass = badge.dataset.publishedKindClass;
+        if (publishedKindClass) {
+          badge.classList.add(publishedKindClass);
+        }
       }
     })();
   </script>
@@ -857,39 +872,3 @@ const isRepost = post.data.sourceType === "repost";
     }
   }
 </style>
-
-{hasToc && (
-  <script is:inline>
-    (() => {
-      const links = Array.from(document.querySelectorAll('[data-toc-link]'));
-      if (!links.length) return;
-
-      const sections = links
-        .map((link) => {
-          const id = link.getAttribute('href')?.slice(1);
-          const element = id ? document.getElementById(id) : null;
-          return element ? { link, element } : null;
-        })
-        .filter(Boolean);
-
-      if (!sections.length) return;
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          const visible = entries
-            .filter((entry) => entry.isIntersecting)
-            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-
-          if (!visible) return;
-
-          links.forEach((link) => link.removeAttribute('data-active'));
-          const current = sections.find((section) => section.element === visible.target);
-          current?.link.setAttribute('data-active', 'true');
-        },
-        { rootMargin: '-18% 0px -72% 0px' },
-      );
-
-      sections.forEach((section) => observer.observe(section.element));
-    })();
-  </script>
-)}

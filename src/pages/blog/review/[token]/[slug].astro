@@ -16,6 +16,8 @@
 // Security note:
 // - this is not authentication
 // - it is a deliberate, hard-to-guess review URL for static-site review workflows
+// - the token is the only barrier; anyone with the URL can load the draft page
+// - because the site is static, the full draft body still ships in the HTML source
 // - the page is also marked noindex/nofollow/noarchive so search engines do not treat
 //   it like a public article
 import { getCollection, render } from "astro:content";

@@ -196,16 +196,39 @@ previewToken: some-review-token
 
 Rules:
 - `previewToken` only works on draft posts
-- it should use lowercase letters, numbers, and hyphens only
+- it should use lowercase letters, numbers, and single hyphen separators only
+- it should contain real words or ids, not placeholder punctuation like `--------`
 - the preview route is built at:
   - `/blog/review/<previewToken>/<slug>/`
 - preview pages are marked `noindex, nofollow, noarchive`
+- the token is a review convenience, not authentication; anyone with the URL can load the draft page
 
 Example:
 
 ```text
 /blog/review/ac-review-2026-05-review/autonomous-code-reviews/
 ```
+
+### Scheduled posts (future publish dates)
+
+If a post is **not** a draft but its `publishDate` is in the future:
+
+- it still gets a normal article URL at `/blog/<slug>/`
+- it stays out of `/blog` and author/archive surfaces until the build sees it as published
+- before the publish date, the article page shows a **restricted preview**
+- on or after that date, the page unlocks the full article in the viewer's **local timezone**
+
+First-principles behavior:
+- drafts are private review workflows
+- scheduled posts are public URLs that should not look fully published too early
+- list surfaces are still static, so a fresh deploy is what makes a scheduled post appear in `/blog`
+
+Important limitation:
+- the restricted preview on a scheduled post is a reader-facing UX gate, not access control
+- because the site is static, the article body is still present in the built HTML before the date passes
+- use draft preview URLs, not scheduled posts, when the body itself should stay less discoverable
+
+Use this when you want a public URL to exist in advance, but you do not want the full article to appear early.
 
 ### Reusable AI writing disclaimer
 

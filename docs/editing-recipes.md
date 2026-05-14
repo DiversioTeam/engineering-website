@@ -162,6 +162,72 @@ If needed, regenerate OG cards too:
 python3 website/scripts/generate-og-images.py
 ```
 
+## Create a review-only draft URL for a blog post
+
+Edit:
+- `src/content/blog/<slug>.md`
+
+Add frontmatter like:
+
+```yaml
+---
+draft: true
+previewToken: some-review-token
+---
+```
+
+Result:
+- the post stays out of `/blog`
+- a private review page is built at:
+  - `/blog/review/<previewToken>/<slug>/`
+
+Rules:
+- `previewToken` should use lowercase letters, numbers, and single hyphen separators only
+- use a real token, not placeholder punctuation like `--------`
+- preview pages are for review workflows, not public publishing
+- preview pages are marked `noindex, nofollow, noarchive`
+
+## Schedule a blog post for a future publish date
+
+Edit:
+- `src/content/blog/<slug>.md`
+
+Set:
+
+```yaml
+publishDate: 2026-05-20
+```
+
+Behavior:
+- the post gets its normal article URL at `/blog/<slug>/`
+- the post stays out of `/blog` and author/archive surfaces until it is published
+- before that date, the page shows a restricted preview instead of the full article body
+- on or after that date, the full article unlocks in the viewer's local timezone
+
+Important static-site note:
+- list pages like `/blog` are still generated at build time
+- that means a fresh deploy is what makes the post appear in list surfaces after the date passes
+
+## Add the reusable AI writing disclaimer
+
+Use this HTML block at the end of the post body:
+
+```html
+<div class="ai-disclaimer">
+  <p class="ai-disclaimer-title">AI writing disclaimer</p>
+  <ul>
+    <li>Verified for typos and grammar using ...</li>
+    <li>Links or references were gathered with the help of ...</li>
+    <li>Images / SVGs / diagrams were generated using ...</li>
+  </ul>
+</div>
+```
+
+Why HTML instead of plain markdown?
+- it keeps the disclaimer visually separate from the article body
+- it gives us one reusable styling hook across all blog posts
+- the exact disclaimer copy can still change per article
+
 ## Change author archive behavior
 
 Edit:

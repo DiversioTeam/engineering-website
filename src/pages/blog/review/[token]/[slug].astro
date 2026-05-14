@@ -1,0 +1,100 @@
+---
+// Draft blog preview route.
+//
+// Why this page exists:
+// - authors need a way to send unfinished posts to reviewers
+// - drafts should not show up on /blog or be treated like published articles
+// - reviewers still need the full article chrome (layout, TOC, reading time, related published posts)
+//   so they can evaluate the real page, not a markdown dump
+//
+// Mental model:
+//   src/content/blog/<slug>.md
+//     + draft: true
+//     + previewToken: some-token
+//       -> generates /blog/review/some-token/<slug>/
+//
+// Security note:
+// - this is not authentication
+// - it is a deliberate, hard-to-guess review URL for static-site review workflows
+// - the token is the only barrier; anyone with the URL can load the draft page
+// - because the site is static, the full draft body still ships in the HTML source
+// - the page is also marked noindex/nofollow/noarchive so search engines do not treat
+//   it like a public article
+import { getCollection, render } from "astro:content";
+import PageLayout from "../../../../layouts/PageLayout.astro";
+import BlogPostArticle from "../../../../components/BlogPostArticle.astro";
+import { getPublishedBlogPosts } from "../../../../utils/blog-posts";
+
+export async function getStaticPaths() {
+  // Only drafts with explicit preview tokens get review URLs.
+  // Plain drafts stay completely hidden from the built site.
+  const posts = (await getCollection("blog"))
+    .filter((post) => post.data.draft && post.data.previewToken)
+    .map((post) => ({
+      params: {
+        token: post.data.previewToken!,
+        slug: (post.data.slug ?? post.id).replace(/\.md$/, ""),
+      },
+      props: { post },
+    }));
+
+  return posts;
+}
+
+// Related posts intentionally stay published-only.
+// Reviewers should get extra reading context, but we should not leak other drafts
+// through sidebars or "continue reading" cards.
+const allPosts = await getPublishedBlogPosts();
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const topLevelHeadings = headings.filter((heading) => heading.depth === 2);
+const tocHeadings = topLevelHeadings.length >= 2 ? topLevelHeadings : headings.filter((heading) => heading.depth <= 3);
+const hasToc = tocHeadings.length >= 2;
+const words = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
+const readingMinutes = Math.max(1, Math.ceil(words / 225));
+const primaryTags = new Set(post.data.tags);
+const relatedPosts = allPosts
+  .filter((candidate) => candidate.id !== post.id)
+  .map((candidate) => {
+    const sharedTags = candidate.data.tags.filter((tag) => primaryTags.has(tag)).length;
+    const sameAuthor = candidate.data.author.name === post.data.author.name ? 1 : 0;
+    const sameType = candidate.data.sourceType === post.data.sourceType ? 1 : 0;
+    return {
+      candidate,
+      score: sharedTags * 10 + sameAuthor * 3 + sameType,
+    };
+  })
+  .filter((item) => item.score > 0)
+  .sort((a, b) => b.score - a.score || b.candidate.data.publishDate.getTime() - a.candidate.data.publishDate.getTime())
+  .slice(0, 3)
+  .map((item) => item.candidate);
+
+const visibleHeroImage = post.data.heroImage;
+---
+
+<PageLayout
+  title={`${post.data.title} (Draft Preview)`}
+  description={post.data.summary}
+  ogImage="/og/blog-default.png"
+  socialTitle="Draft blog preview"
+  socialDescription="Private review URL for an unpublished Diversio Engineering article."
+  socialType="website"
+  robots="noindex, nofollow, noarchive"
+  currentNav="blog"
+>
+  <BlogPostArticle
+    post={post}
+    hasToc={hasToc}
+    tocHeadings={tocHeadings}
+    readingMinutes={readingMinutes}
+    relatedPosts={relatedPosts}
+    visibleHeroImage={visibleHeroImage}
+    kindLabel="Draft preview"
+    showKindPill={false}
+    bannerLabel="Draft preview"
+    bannerCopy="This article is unpublished and available only through this review URL."
+    relatedTitle="Published posts related to this draft"
+  >
+    <Content />
+  </BlogPostArticle>
+</PageLayout>

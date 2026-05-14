@@ -42,6 +42,51 @@ python3 scripts/generate-og-images.py && npm run build
 ./scripts/checkout-asm.sh $(cat agent-skills-source.ref)
 ```
 
+## Blog-specific authoring patterns
+
+### 1. Review-only draft URLs
+
+Use this when a post is not ready for `/blog` yet, but another person needs a
+real URL to review the full page.
+
+Frontmatter pattern:
+
+```yaml
+---
+draft: true
+previewToken: some-review-token
+---
+```
+
+Result:
+- the post stays out of `/blog`
+- Astro builds a review URL at:
+  - `/blog/review/<previewToken>/<slug>/`
+- the preview page is marked `noindex, nofollow, noarchive`
+
+This is a review convenience, not authentication.
+
+### 2. AI writing disclaimer block
+
+When a post used AI in narrow, explicit ways, use the reusable disclaimer block
+at the end of the markdown body:
+
+```html
+<div class="ai-disclaimer">
+  <p class="ai-disclaimer-title">AI writing disclaimer</p>
+  <ul>
+    <li>Verified for typos and grammar using ...</li>
+    <li>Links or references were gathered with the help of ...</li>
+    <li>Images / SVGs / diagrams were generated using ...</li>
+  </ul>
+</div>
+```
+
+Why HTML instead of markdown?
+- it keeps the disclaimer visually separate from the main article prose
+- it reuses one stable styling hook across all blog posts
+- each article can change the content without changing the presentation
+
 ## Doc routing — which file to read
 
 | When you need to... | Read |

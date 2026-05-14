@@ -3,9 +3,34 @@ import { sortBlogPosts } from "./sort-blog-posts";
 
 export type BlogPost = CollectionEntry<"blog">;
 
+// Blog publication-state helpers.
+//
+// Why these exist:
+// - `draft: true` means "not public at all"
+// - a future `publishDate` means "scheduled" rather than "draft"
+// - published surfaces like `/blog` and author archives should only show posts
+//   that are live at build time
+//
+// Mental model:
+//   draft post
+//     -> never appears on public blog surfaces
+//   scheduled post (future publishDate)
+//     -> gets a direct article URL, but stays off lists until the date is reached
+//   live post
+//     -> appears everywhere normal blog content appears
+export function isScheduledBlogPost(post: BlogPost, at?: Date): boolean {
+  const effectiveAt = at ?? new Date();
+  return !post.data.draft && post.data.publishDate.getTime() > effectiveAt.getTime();
+}
+
+export function isPublishedBlogPost(post: BlogPost, at?: Date): boolean {
+  const effectiveAt = at ?? new Date();
+  return !post.data.draft && !isScheduledBlogPost(post, effectiveAt);
+}
+
 export async function getPublishedBlogPosts(): Promise<BlogPost[]> {
   const posts = sortBlogPosts(
-    (await getCollection("blog")).filter((post) => !post.data.draft)
+    (await getCollection("blog")).filter((post) => isPublishedBlogPost(post))
   );
 
   const featuredPosts = posts.filter((post) => post.data.featured);

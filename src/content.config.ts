@@ -81,6 +81,33 @@ const blog = defineCollection({
       socialDescription: z.string().optional(),
       featured: z.boolean().default(false),
       draft: z.boolean().default(false),
+
+      // Draft-review token.
+      //
+      // First principles:
+      // - drafts should stay out of the public /blog index
+      // - reviewers still need a stable URL they can open in a browser
+      // - the URL should be explicit and opt-in, not automatically generated for every draft
+      //
+      // Mental model:
+      //   draft: true
+      //     -> keep this post unpublished
+      //   previewToken: some-token
+      //     -> also generate /blog/review/some-token/<slug>/ for private review
+      //
+      // Why keep this token simple?
+      // - it becomes part of the URL path
+      // - lowercase + digits + hyphens are easy to read, copy, and type
+      // - we still require at least one alphanumeric segment so tokens are not
+      //   just placeholder punctuation like `--------`
+      previewToken: z
+        .string()
+        .min(8)
+        .regex(
+          /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+          "previewToken must use lowercase letters, numbers, and single hyphen separators, with at least one alphanumeric character.",
+        )
+        .optional(),
     })
     .superRefine((data, ctx) => {
       if (data.sourceType === "repost" && !data.sourceUrl) {
@@ -96,6 +123,16 @@ const blog = defineCollection({
           code: z.ZodIssueCode.custom,
           message: "Reposts must include canonicalUrl.",
           path: ["canonicalUrl"],
+        });
+      }
+
+      // Guardrail: preview tokens only make sense for unpublished work.
+      // If a post is public, its stable URL is the normal /blog/<slug>/ route.
+      if (!data.draft && data.previewToken) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "previewToken may only be set on draft posts.",
+          path: ["previewToken"],
         });
       }
     }),

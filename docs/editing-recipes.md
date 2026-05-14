@@ -3,6 +3,7 @@
 Use this guide when you already know *what* you want to change and just need to know *where* to do it.
 
 For broader page-scope and ownership rules, read `docs/content-governance.md` first.
+For which repo owns each route, see `docs/route-ownership.md`.
 If you are not sure whether the change should be a page edit, shared-data edit, or blog post, read `docs/editorial-workflow.md` too.
 
 ## Change `/how-we-work` notice copy or featured examples

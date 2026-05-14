@@ -15,7 +15,13 @@ const communityPage = {
   heroDescription: "Diversio Engineering shares tools, writing, systems notes, and working practices in the open. This is where to start if you want to follow the work, use it, or contribute back to it.",
 } as const;
 const metrics = await getSiteMetrics();
-const repoUrl = siteConfig.githubRepoUrl;
+
+// All repo links on /community are Agentic Tools-specific.
+// The featured repo card, issues, PRs, and contributing guide all live in
+// agent-skills-marketplace — not this repo (engineering-website).
+// See site.config.mjs for the URL definitions and docs/route-ownership.md
+// for the full split-repo ownership table.
+const repoUrl = siteConfig.agentSkillsRepoUrl;
 const issuesUrl = `${repoUrl}/issues`;
 const pullsUrl = `${repoUrl}/pulls`;
 const contributingUrl = `${repoUrl}/blob/main/CONTRIBUTING.md`;

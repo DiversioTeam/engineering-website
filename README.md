@@ -7,14 +7,19 @@ site.
 
 ## Quick Start
 
-Before making content or structure changes, read:
-- `docs/content-governance.md` for page scope, content ownership, blog ordering, and stack asset provenance
-- `docs/editing-recipes.md` for “change X → edit Y” guidance
-- `docs/editorial-workflow.md` for deciding whether something belongs on a page, in shared data, or in a blog post
+Before making content or structure changes, read the maintainer docs:
+
+| Doc | Read when... |
+|---|---|
+| `docs/maintainer-quickstart.md` | You need to make a change and want the fastest path |
+| `docs/local-dev.md` | Setting up this repo for the first time |
+| `docs/route-ownership.md` | You're unsure which repo owns a route or workflow |
+| `docs/content-governance.md` | You need page scope, blog ordering, or stack asset rules |
+| `docs/editing-recipes.md` | You know what to change and need the exact file |
+| `docs/editorial-workflow.md` | You're deciding between a page edit, shared data, or a blog post |
 
 
 ```bash
-cd website
 npm install
 npm run dev      # local dev at http://localhost:4321
 npm run build    # production build -> dist/
@@ -42,11 +47,40 @@ export AGENT_SKILLS_REPO_DIR=/absolute/path/to/agent-skills-marketplace
 
 This applies to both:
 - the Astro build/extraction path
-- `website/scripts/generate-og-images.py`
+- `scripts/generate-og-images.py`
 
 ## The Big Idea
 
-The website currently works as a small set of connected page families.
+This site is built and deployed from a single repo but its content comes from two:
+
+```text
+                        engineering.diversio.com
+                                 │
+                   ┌─────────────┴─────────────┐
+                   │    engineering-website     │  ← builds & deploys everything
+                   │   (this repo)              │
+                   └─────────────┬─────────────┘
+                                 │
+              ┌──────────────────┼──────────────────┐
+              │                  │                  │
+     Broad pages          Blog content       Agentic Tools pages
+     /                    /blog/*            /agentic-tools
+     /how-we-work         /authors/*         /registry
+     /systems                                /docs/*
+     /community                              /skills/*
+     /security                               /pi/*
+     /terms
+     /404
+                                             ▲
+                              ┌──────────────┴──────────────┐
+                              │  agent-skills-marketplace    │  ← source of truth
+                              │  (separate repo)             │     for tool docs
+                              └─────────────────────────────┘
+```
+
+**Why two repos?** The Agentic Tools documentation (skill definitions, package READMEs, catalog metadata) is the canonical source of truth and lives in `agent-skills-marketplace` alongside the tools themselves. The broader engineering site — how-we-work, systems, blog, community — lives here. At build time, this repo resolves tool content from an `agent-skills-marketplace` checkout at a pinned SHA.
+
+See `docs/route-ownership.md` for the full table of which repo owns each route.
 
 ### 1. Hub
 The homepage explains the whole engineering site and routes readers toward the right surface.
@@ -147,17 +181,63 @@ Brief context or excerpt here.
 | `slug` | Recommended | Match the original slug so URLs are predictable |
 | `publishDate` | Recommended | Use the original publish date so the timeline is honest |
 
+### Draft review URLs
+
+Unpublished posts can be shared privately for review without appearing on `/blog`.
+
+Add this frontmatter to a draft post:
+
+```yaml
+---
+draft: true
+previewToken: some-review-token
+---
+```
+
+Rules:
+- `previewToken` only works on draft posts
+- it should use lowercase letters, numbers, and hyphens only
+- the preview route is built at:
+  - `/blog/review/<previewToken>/<slug>/`
+- preview pages are marked `noindex, nofollow, noarchive`
+
+Example:
+
+```text
+/blog/review/ac-review-2026-05-review/autonomous-code-reviews/
+```
+
+### Reusable AI writing disclaimer
+
+Use this HTML block at the end of posts when you want the disclaimer to render as subtext rather than normal article content:
+
+```html
+<div class="ai-disclaimer">
+  <p class="ai-disclaimer-title">AI writing disclaimer</p>
+  <ul>
+    <li>Verified for typos and grammar using ...</li>
+    <li>Links or references were gathered with the help of ...</li>
+    <li>Images / SVGs / diagrams were generated using ...</li>
+  </ul>
+</div>
+```
+
+Why this is HTML instead of plain markdown:
+- it keeps the disclaimer visually separate from the article body
+- it gives us one reusable class name for styling across all blog posts
+- the content can vary per article while the presentation stays consistent
+
 ### Commands for managing posts
 
 ```bash
 # Add a new repost markdown file
-$EDITOR website/src/content/blog/repost-some-post.md
+$EDITOR src/content/blog/repost-some-post.md
 
 # Regenerate social preview cards (blog posts get their own OG images)
-python3 website/scripts/generate-og-images.py
+python3 scripts/generate-og-images.py
 
 # Rebuild and check
-cd website && npm run build
+npm run build
 find dist/blog -name '*.html' | sort
 
 # Check a specific repost page
@@ -236,7 +316,6 @@ We do **not** want a second website-only documentation schema that drifts.
 ## Project Structure
 
 ```text
-website/
 ├── astro.config.mjs
 ├── package.json
 ├── site.config.mjs
@@ -471,7 +550,7 @@ Mental model:
 ```text
 GitHub Actions
   -> install dependencies
-  -> build website/dist
+  -> build dist
   -> upload the finished static output to Cloudflare Pages
 ```
 
@@ -538,7 +617,7 @@ plugins/monty-code-review/skills/monty-code-review/SKILL.md
 Then rebuild and check the generated site pages:
 
 ```bash
-cd website
+
 npm run build
 npm run dev
 ```
@@ -630,14 +709,14 @@ social crawlers can tell where the piece came from.
 ### Rebuild the site
 
 ```bash
-cd website
+
 npm run build
 ```
 
 ### Run the local dev server
 
 ```bash
-cd website
+
 npm run dev
 ```
 
@@ -653,7 +732,7 @@ find pi-packages -name README.md | sort
 ### Inspect the built output quickly
 
 ```bash
-cd website
+
 rg -n '/skills/|/pi/' dist
 ```
 
@@ -711,7 +790,7 @@ public/og/blog-*.png
 Those images are generated by:
 
 ```bash
-python3 website/scripts/generate-og-images.py
+python3 scripts/generate-og-images.py
 ```
 
 Why generate them ahead of time?
@@ -739,14 +818,14 @@ Typical workflow:
 
 ```bash
 # 1. Change metadata or copy that affects a social card
-$EDITOR website/src/data/marketplace.json
-$EDITOR website/src/content/blog/*.md
+$EDITOR src/data/marketplace.json
+$EDITOR src/content/blog/*.md
 
 # 2. Regenerate the PNG assets
-python3 website/scripts/generate-og-images.py
+python3 scripts/generate-og-images.py
 
 # 3. Rebuild the site and spot-check a few routes
-cd website && npm run build
+npm run build
 rg -n 'og:image|twitter:image' dist/docs/dev-workflow/index.html
 rg -n 'og:image|twitter:image' dist/skills/dev-workflow/index.html
 rg -n 'og:image|twitter:image' dist/pi/dev-workflow/index.html
@@ -789,19 +868,66 @@ not as normal background noise.
 
 ## Deployment
 
-The site is fully static and deploys cleanly to Cloudflare Pages.
+The site deploys to Cloudflare Pages at `engineering.diversio.com`.
 
-Current deploy shape:
+### Build pipeline
 
-- `Validate Website` remains the read-only build gate
-- `.github/workflows/deploy-website-cloudflare-pages.yml` builds the site in GitHub Actions and uploads `website/dist` to Cloudflare Pages
-- PR previews run for same-repo PRs
-- production deploys run automatically on pushes to `main`
+```text
+  ┌─────────────────────────────────────────────────────────┐
+  │                    Every build                           │
+  │                                                         │
+  │  1. Checkout THIS repo (engineering-website)            │
+  │  2. Read agent-skills-source.ref → ASM SHA              │
+  │  3. Checkout agent-skills-marketplace at that SHA       │
+  │     into vendor/agent-skills-marketplace                 │
+  │  4. Copy marketplace.json from ASM checkout              │
+  │     cp vendor/.../marketplace.json src/data/            │
+  │  5. npm install && npm run build                        │
+  │  6. (deploy workflow only) wrangler pages deploy dist/  │
+  └─────────────────────────────────────────────────────────┘
 
-Current redirect split:
+  ┌─ Where the ASM SHA comes from ──────────────────────────┐
+  │                                                         │
+  │  PR preview / push to main:                             │
+  │    → reads agent-skills-source.ref (tracked lock file)  │
+  │                                                         │
+  │  repository_dispatch from ASM (production only):        │
+  │    → uses the exact SHA from the dispatch payload       │
+  │      (overrides the lock file)                          │
+  └─────────────────────────────────────────────────────────┘
+```
 
-- `public/_redirects` handles same-project path aliases such as `/marketplace` -> `/agentic-tools`
-- hostname migration from `agents.diversio.com` to `engineering.diversio.com` still needs host-level redirect configuration during rollout
+### The lock file (`agent-skills-source.ref`)
+
+This file pins the default ASM version used for builds. It lives at the repo root and contains a single 40-character git SHA.
+
+**How to update it**:
+```bash
+# 1. Find the SHA you want to pin (e.g., latest ASM main):
+git -C ../agent-skills-marketplace rev-parse HEAD > agent-skills-source.ref
+
+# 2. Commit and push — the change is reviewed like any other PR.
+git add agent-skills-source.ref && git commit -m "pin ASM to <sha>"
+```
+
+**When to update**: when you want the site to pick up new Agentic Tools content (new skills, updated docs, catalog changes) without waiting for an ASM push to trigger a deploy. The dispatch from ASM always overrides the lock file with the merged SHA, so the lock file is only the default — it doesn't block ASM-triggered deploys.
+
+### Local dev (offline-first, using sibling ASM checkout)
+```bash
+cp ../agent-skills-marketplace/website/src/data/marketplace.json src/data/marketplace.json
+npm install --package-lock=false
+npm run build
+```
+
+### CI workflows
+- `.github/workflows/validate-website.yml` — read-only build gate for PRs
+- `.github/workflows/deploy-website-cloudflare-pages.yml` — preview + production deploy
+
+### Trigger from agent-skills-marketplace
+- Merges to `agent-skills-marketplace/main` dispatch a `repository_dispatch` event to this repo.
+- The ASM workflow (`.github/workflows/trigger-engineering-website-deploy.yml`) sends the exact merged SHA.
+- Production deploys use that SHA instead of the lock file.
+- Cross-repo trigger is main-only — no preview deploys from ASM PRs.
 
 Required GitHub secrets:
 
@@ -817,7 +943,7 @@ Recommended settings:
 | Setting | Value |
 |---|---|
 | Pages project name | `diversio-engineering` |
-| Deploy path | `website/dist` |
+| Deploy path | `dist` |
 | Production branch | `main` |
 | Node.js version | 24 |
 
@@ -826,7 +952,6 @@ Recommended settings:
 Before you trust CI, run the same core steps locally:
 
 ```bash
-cd website
 npm install --package-lock=false
 npm run build
 ```
@@ -875,7 +1000,7 @@ Header, footer, hero, favicon, and OG metadata all use this branding layer.
 
 If you add or remove a major route family, data source, or doc surface, update:
 
-1. this `website/README.md`
+1. this `README.md`
 2. `src/pages/docs/index.astro`
 3. any affected registry or homepage navigation
 

@@ -8,7 +8,7 @@
 // Mental model:
 // - content pages decide *what they say*
 // - this file decides *what the site is called*, *where sections live*, and
-//   *which public GitHub destination a shared UI link should use*
+//   *which public GitHub destinations shared UI links should use*
 //
 // If you rename a section or move a top-level route, update this file first,
 // then update any page copy that refers to the old name.
@@ -17,8 +17,26 @@ export const siteConfig = {
   siteUrl: "https://engineering.diversio.com",
   toolsSectionName: "Agentic Tools",
   blogSectionName: "Blog",
+
+  // Two distinct GitHub URLs — they serve different purposes:
+  //
+  // githubUrl (org-level)
+  //   Used by: Header icon, Footer "GitHub" link
+  //   Points to: https://github.com/DiversioTeam
+  //   Why: General "find us on GitHub" link — not repo-specific.
+  //
+  // agentSkillsRepoUrl (repo-specific)
+  //   Used by: /community contribution paths (featured repo card, issues, PRs, contributing guide)
+  //   Points to: https://github.com/DiversioTeam/agent-skills-marketplace
+  //   Why: The /community page has an Agentic Tools contribution section.
+  //        Those links must point to the ASM repo where issues, PRs, and
+  //        CONTRIBUTING.md actually live. Changing this to engineering-website
+  //        would silently break every contribution link on /community.
+  //
+  // If a future page needs to link to the engineering-website repo itself,
+  // add a separate engineeringWebsiteRepoUrl entry at that time.
   githubUrl: "https://github.com/DiversioTeam",
-  githubRepoUrl: "https://github.com/DiversioTeam/agent-skills-marketplace",
+  agentSkillsRepoUrl: "https://github.com/DiversioTeam/agent-skills-marketplace",
   defaultDescription:
     "Diversio Engineering shares engineering systems, open tools, deep docs, and writing.",
   routes: {

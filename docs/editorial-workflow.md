@@ -3,6 +3,7 @@
 Use this guide when you need to decide **what kind of website change** to make before you start editing files.
 
 For page ownership rules, read `docs/content-governance.md`.
+For which repo owns each route (split-repo architecture), see `docs/route-ownership.md`.
 For direct file targets, read `docs/editing-recipes.md`.
 
 ## Start with the kind of idea you have

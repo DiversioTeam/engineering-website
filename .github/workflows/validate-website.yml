@@ -1,0 +1,101 @@
+# Website build validation.
+#
+# Why this workflow exists:
+# - the website is a real product surface, not just an incidental docs folder
+# - the site reads source docs from an external agent-skills-marketplace checkout at build time
+# - a static site can still break in simple ways: route generation, imports,
+#   metadata wiring, or build-time extraction from repo docs
+#
+# First principles:
+# - if a change touches the website, CI should at least prove the Astro build works
+# - the cheapest useful check is a clean install plus `npm run build`
+# - keep this workflow narrow and read-only (no deploy)
+#
+# Source resolution:
+# - checks out agent-skills-marketplace at the SHA recorded in agent-skills-source.ref
+# - copies marketplace.json from the ASM checkout before building
+# - sets AGENT_SKILLS_REPO_DIR so site-docs.ts extraction finds the right source files
+name: Validate Website
+
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "public/**"
+      - "scripts/**"
+      - "docs/**"
+      - "site.config.mjs"
+      - "astro.config.mjs"
+      - "package.json"
+      - "tsconfig.json"
+      - "agent-skills-source.ref"
+      - ".github/workflows/validate-website.yml"
+  push:
+    paths:
+      - "src/**"
+      - "public/**"
+      - "scripts/**"
+      - "docs/**"
+      - "site.config.mjs"
+      - "astro.config.mjs"
+      - "package.json"
+      - "tsconfig.json"
+      - "agent-skills-source.ref"
+      - ".github/workflows/validate-website.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build-website:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout engineering-website
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Read ASM source SHA
+        id: asm-sha
+        shell: bash
+        run: |
+          sha=$(cat agent-skills-source.ref | tr -d '[:space:]')
+          echo "sha=${sha}" >> "$GITHUB_OUTPUT"
+          echo "Building with agent-skills-marketplace SHA: ${sha}"
+
+      - name: Checkout agent-skills-marketplace
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          repository: DiversioTeam/agent-skills-marketplace
+          ref: ${{ steps.asm-sha.outputs.sha }}
+          path: vendor/agent-skills-marketplace
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Copy marketplace.json from ASM checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp vendor/agent-skills-marketplace/website/src/data/marketplace.json src/data/marketplace.json
+          echo "marketplace.json synced from ASM checkout"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --package-lock=false
+
+      - name: Build website
+        shell: bash
+        env:
+          AGENT_SKILLS_REPO_DIR: ${{ github.workspace }}/vendor/agent-skills-marketplace
+        run: |
+          set -euo pipefail
+          npm run build

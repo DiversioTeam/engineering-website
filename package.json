@@ -1,7 +1,7 @@
 {
-  "name": "agent-skills-marketplace-website",
+  "name": "diversio-engineering-website",
   "version": "1.0.0",
-  "description": "Diversio Engineering website with Agentic Tools, deep docs, and blog scaffolding for original posts and curated reposts.",
+  "description": "Diversio Engineering public website — systems, tools, writing, and working practices from Diversio Engineering.",
   "type": "module",
   "scripts": {
     "dev": "astro dev",

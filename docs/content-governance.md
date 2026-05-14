@@ -2,7 +2,7 @@
 
 This guide is for staff maintaining the Diversio Engineering website.
 
-Use `README.md` for orientation, this guide for page scope and ownership rules, `docs/editing-recipes.md` for common change tasks, and `docs/editorial-workflow.md` for page-vs-post judgment calls.
+Use `README.md` for orientation, `docs/route-ownership.md` for which repo owns each route (split-repo architecture), this guide for page scope and ownership rules, `docs/editing-recipes.md` for common change tasks, and `docs/editorial-workflow.md` for page-vs-post judgment calls.
 
 Use it when you need to answer:
 - where should this content live?
@@ -49,6 +49,9 @@ That keeps normal local builds fast and offline while still allowing future spli
   - shared site name, routes, nav labels, and primary URLs
 - `src/data/marketplace.json`
   - tool/package counts and registry metadata
+  - **⚠️ Transitional**: this vendored copy is a bootstrap artifact. Do not hand-edit.
+    The canonical source lives in `agent-skills-marketplace`. A deterministic sync
+    contract will be established before production cutover (Task 003).
 - `src/data/engineering-principles.ts`
   - `/how-we-work` principles
 - `src/data/engineering-practices.ts`

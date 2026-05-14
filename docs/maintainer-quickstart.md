@@ -20,10 +20,10 @@ If you need to make a routine change to the engineering site, start here. This g
 | Systems highlights | `src/data/engineering-highlights.ts` | Used by both `/systems` and `/how-we-work` |
 | Featured tools on homepage | `src/data/agentic-tools.ts` → `homepageFeaturedPluginSlugs` | Array of plugin slugs |
 | Featured tools on `/agentic-tools` | `src/data/agentic-tools.ts` → `toolsPageFeaturedPluginSlugs` | |
-| A new blog post | `src/content/blog/<slug>.md` | See `README.md` for frontmatter schema |
+| A new blog post | `src/content/blog/<slug>.md` | See `docs/runbooks/blog-authoring.md` for frontmatter schema |
 | A review-only draft blog URL | `src/content/blog/<slug>.md` → `draft: true` + `previewToken: ...` | Builds at `/blog/review/<previewToken>/<slug>/` without appearing on `/blog`; token should be lowercase words/ids with hyphen separators |
 | A future-dated scheduled post | `src/content/blog/<slug>.md` → future `publishDate` | Builds at normal `/blog/<slug>/`, shows a restricted preview until that date, and stays out of `/blog` until a fresh deploy |
-| The AI writing disclaimer block | Blog markdown HTML block | Use the reusable `.ai-disclaimer` snippet documented in `README.md` |
+| The AI writing disclaimer block | Blog markdown HTML block | Use the reusable `.ai-disclaimer` snippet documented in `docs/runbooks/blog-authoring.md` |
 | Blog ordering / featured post | `src/content/blog/<slug>.md` → `featured: true` | Only one post at a time; logic in `utils/pick-featured-blog-post.ts` |
 | Author page content | Derived from blog frontmatter `author.name` | Pages auto-generated from `src/pages/authors/` |
 | A shared CTA or route summary | `src/data/site-entry-points.ts` | Reused across homepage, `/how-we-work`, `/community` |
@@ -96,9 +96,12 @@ engineering-website/                  ← you are here
 
 ## Related docs
 
-- `docs/local-dev.md` — setup and everyday workflow
+- `docs/local-dev.md` — first-time setup
+- `docs/architecture/overview.md` — split-repo model and core code paths
+- `docs/quality/gates.md` — build gates, CI jobs, and recurring failures
+- `docs/runbooks/development.md` — everyday workflow, OG regeneration, ASM pinning
+- `docs/runbooks/blog-authoring.md` — post schema, draft previews, scheduled posts
 - `docs/route-ownership.md` — which repo owns each route and workflow
 - `docs/content-governance.md` — page scope, blog ordering, stack rules
 - `docs/editing-recipes.md` — detailed "change X → edit Y" reference
 - `docs/editorial-workflow.md` — page vs post vs shared-data decisions
-- `README.md` — architecture overview and deployment pipeline

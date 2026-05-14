@@ -27,7 +27,7 @@ export AGENT_SKILLS_REPO_DIR=/absolute/path/to/agent-skills-marketplace
 
 Use this when:
 - `src/data/site-docs.ts` cannot find `plugins/` or `pi-packages/`
-- `website/scripts/generate-og-images.py` cannot find the source repo
+- `scripts/generate-og-images.py` cannot find the source repo
 - you are working from a split-repo or vendored-checkout setup
 
 ## Change homepage or community stats/counts
@@ -152,14 +152,13 @@ Create:
 Then rebuild:
 
 ```bash
-cd website
 npm run build
 ```
 
 If needed, regenerate OG cards too:
 
 ```bash
-python3 website/scripts/generate-og-images.py
+python3 scripts/generate-og-images.py
 ```
 
 ## Create a review-only draft URL for a blog post
@@ -303,7 +302,6 @@ Do **not** turn it back into only an Agentic Tools contribution page.
 After most changes:
 
 ```bash
-cd website
 npm run build
 ```
 

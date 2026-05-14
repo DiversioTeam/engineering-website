@@ -2,7 +2,7 @@
 
 This guide is for staff maintaining the Diversio Engineering website.
 
-Use `README.md` for orientation, `docs/route-ownership.md` for which repo owns each route (split-repo architecture), this guide for page scope and ownership rules, `docs/editing-recipes.md` for common change tasks, and `docs/editorial-workflow.md` for page-vs-post judgment calls.
+Use `README.md` for orientation, `docs/architecture/overview.md` for the split-repo model, `docs/route-ownership.md` for exact route ownership, this guide for page scope and ownership rules, `docs/editing-recipes.md` for common change tasks, and `docs/editorial-workflow.md` for page-vs-post judgment calls.
 
 Use it when you need to answer:
 - where should this content live?
@@ -34,12 +34,15 @@ When in doubt:
 
 The website depends on an `agent-skills-marketplace` checkout for tool docs and metadata.
 
-Resolution order currently prefers:
+For everyday local work, the documented resolution order prefers:
 1. `AGENT_SKILLS_REPO_DIR`
 2. the current git repo root when it contains `plugins/` and `pi-packages/`
 3. `../agent-skills-marketplace`
 4. `../vendor/agent-skills-marketplace`
 5. `./vendor/agent-skills-marketplace`
+
+The actual build/extraction code also probes a couple of additional fallback candidates.
+See `docs/architecture/overview.md` and `docs/local-dev.md` for the fuller resolver details.
 
 That keeps normal local builds fast and offline while still allowing future split-repo setups to point at an external checkout explicitly.
 
@@ -48,10 +51,9 @@ That keeps normal local builds fast and offline while still allowing future spli
 - `site.config.mjs`
   - shared site name, routes, nav labels, and primary URLs
 - `src/data/marketplace.json`
-  - tool/package counts and registry metadata
-  - **⚠️ Transitional**: this vendored copy is a bootstrap artifact. Do not hand-edit.
-    The canonical source lives in `agent-skills-marketplace`. A deterministic sync
-    contract will be established before production cutover (Task 003).
+  - copied build artifact used by this repo at build time
+  - canonical source: `agent-skills-marketplace/website/src/data/marketplace.json`
+  - never hand-edit this copy here
 - `src/data/engineering-principles.ts`
   - `/how-we-work` principles
 - `src/data/engineering-practices.ts`

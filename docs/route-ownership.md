@@ -81,16 +81,18 @@ Who owns each CI/deploy concern after the split.
 | Preview deploys (PR review) | engineering-website | `.github/workflows/deploy-website-cloudflare-pages.yml` (same-repo PRs only) |
 | Production deploys (push to main) | engineering-website | Same workflow, production job, uses `agent-skills-source.ref` lock file |
 | Production deploys (ASM content update) | engineering-website (triggered by ASM) | `repository_dispatch` from ASM with exact SHA overrides lock file |
-| Trigger dispatch (ASM main merge) | agent-skills-marketplace | `.github/workflows/trigger-engineering-website-deploy.yml` (main-only) |
-| ASM-local build validation | agent-skills-marketplace | `.github/workflows/validate-website.yml` (read-only, does not deploy) |
-| Old ASM deploy workflow | RETIRED | `deploy-website-cloudflare-pages.yml` has `if: false` on all jobs |
+| Trigger dispatch (ASM main merge) | agent-skills-marketplace | ASM repo: `.github/workflows/trigger-engineering-website-deploy.yml` (main-only) |
+| ASM-local build validation | agent-skills-marketplace | ASM repo: `.github/workflows/validate-website.yml` (read-only, does not deploy) |
+| Old ASM deploy workflow | RETIRED | ASM repo: `.github/workflows/deploy-website-cloudflare-pages.yml` has `if: false` on all jobs |
 | Cloudflare Pages project | engineering-website | Project `diversio-engineering`, credentials in repo secrets |
 | Domain (engineering.diversio.com) | Cloudflare Pages | Configured in Cloudflare dashboard, not in repo |
 
 ## Related docs
 
+- `docs/architecture/overview.md` — split-repo model and core code paths
 - `docs/local-dev.md` — local development setup and fast-path workflow
 - `docs/maintainer-quickstart.md` — common tasks and which files to edit
+- `docs/quality/gates.md` — build gates and CI behavior
 - `docs/content-governance.md` — page scope and source-of-truth rules
 - `docs/editing-recipes.md` — "change X → edit Y" reference
 - `docs/editorial-workflow.md` — page vs post vs shared-data decisions

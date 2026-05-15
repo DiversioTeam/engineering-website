@@ -1,6 +1,7 @@
 ---
 // Header.astro - Top navigation bar
 import { siteConfig } from "../../site.config.mjs";
+import BrandLockup from "./BrandLockup.astro";
 
 export interface Props {
   currentNav?: "home" | "howWeWork" | "systems" | "tools" | "blog" | "community";
@@ -11,15 +12,7 @@ const navItems = siteConfig.navItems;
 ---
 <header class="header">
   <div class="header-inner">
-    <a href={siteConfig.routes.home} class="header-brand" aria-label={`${siteConfig.siteName} Home`}>
-      <img
-        src="/diversio-logo.svg"
-        alt="Diversio"
-        class="header-brand-logo"
-        width="116"
-        height="20"
-      />
-    </a>
+    <BrandLockup href={siteConfig.routes.home} ariaLabel={`${siteConfig.siteName} Home`} />
     <div class="header-right-cluster">
       <nav class="header-nav" aria-label="Main navigation">
         {navItems.map((item) => (
@@ -75,22 +68,10 @@ const navItems = siteConfig.navItems;
     flex-wrap: nowrap;
   }
 
-  .header-brand {
-    display: flex;
-    align-items: center;
-    gap: 0.625rem;
-    text-decoration: none;
-    color: var(--color-primary);
+  :global(.header-inner > .brand-lockup) {
+    min-height: 100%;
     flex-shrink: 0;
   }
-
-  .header-brand-logo {
-    display: block;
-    width: auto;
-    height: 1.125rem;
-    flex-shrink: 0;
-  }
-
 
   .header-nav {
     display: flex;
@@ -231,7 +212,7 @@ const navItems = siteConfig.navItems;
       padding-top: var(--space-xs);
     }
 
-    .header-brand {
+    :global(.header-inner > .brand-lockup) {
       min-height: calc(var(--header-height) - var(--space-xs));
       flex: 1 1 auto;
     }

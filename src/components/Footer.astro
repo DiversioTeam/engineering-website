@@ -1,26 +1,18 @@
 ---
 // Footer.astro - Site footer
 import { siteConfig } from "../../site.config.mjs";
+import BrandLockup from "./BrandLockup.astro";
 ---
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-brand">
-      <a
+      <BrandLockup
         href="https://www.diversio.com"
-        class="footer-brand-link"
-        aria-label="Diversio.com"
+        ariaLabel="Diversio.com"
         target="_blank"
         rel="noopener"
-      >
-        <img
-          src="/diversio-logo.svg"
-          alt="Diversio"
-          class="footer-brand-logo"
-          width="116"
-          height="20"
-        />
-      </a>
-      <span class="footer-product">{siteConfig.siteName}</span>
+        compact={true}
+      />
     </div>
     <nav class="footer-links" aria-label="Footer navigation">
       <a href={siteConfig.githubUrl} target="_blank" rel="noopener">GitHub</a>
@@ -59,28 +51,7 @@ import { siteConfig } from "../../site.config.mjs";
 
   .footer-brand {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-2xs);
     align-items: flex-start;
-  }
-
-  .footer-brand-link {
-    display: inline-flex;
-    align-items: center;
-    width: fit-content;
-  }
-
-  .footer-brand-logo {
-    display: block;
-    width: auto;
-    height: 1rem;
-  }
-
-  .footer-product {
-    font-family: var(--font-headline);
-    font-size: var(--text-body-md);
-    font-weight: var(--weight-semibold);
-    color: var(--color-text-secondary);
   }
 
   .footer-links {

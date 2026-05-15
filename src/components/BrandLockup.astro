@@ -1,0 +1,67 @@
+---
+import { siteConfig } from "../../site.config.mjs";
+
+export interface Props {
+  href: string;
+  ariaLabel: string;
+  target?: string;
+  rel?: string;
+  compact?: boolean;
+}
+
+const { href, ariaLabel, target, rel, compact = false } = Astro.props;
+---
+<a
+  href={href}
+  class={`brand-lockup${compact ? " brand-lockup--compact" : ""}`}
+  aria-label={ariaLabel}
+  target={target}
+  rel={rel}
+>
+  <img
+    src="/diversio-logo.svg"
+    alt="Diversio"
+    class="brand-lockup-logo"
+    width="116"
+    height="20"
+  />
+  <span class="brand-lockup-product">{siteConfig.siteName}</span>
+</a>
+
+<style>
+  .brand-lockup {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.25rem;
+    width: fit-content;
+    text-decoration: none;
+    color: var(--color-primary);
+  }
+
+  .brand-lockup-logo {
+    display: block;
+    width: auto;
+    height: 1.125rem;
+    flex-shrink: 0;
+  }
+
+  .brand-lockup-product {
+    font-family: var(--font-headline);
+    font-size: var(--text-body-md);
+    font-weight: var(--weight-semibold);
+    line-height: 1.1;
+    color: var(--color-text-secondary);
+  }
+
+  .brand-lockup--compact .brand-lockup-logo {
+    height: 1rem;
+  }
+
+  @media (max-width: 860px) {
+    .brand-lockup-product {
+      font-size: var(--text-body-sm);
+    }
+  }
+</style>

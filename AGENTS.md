@@ -13,7 +13,7 @@ all public pages. Agentic Tools content is source-owned by
 - Read `docs/architecture/overview.md` for the split-repo model and core code paths.
 - Read `docs/quality/gates.md` for build gates, CI jobs, and recurring failures.
 - Read `docs/runbooks/development.md` for everyday workflows, ASM pinning, and OG generation.
-- Read `docs/runbooks/blog-authoring.md` for blog frontmatter, review URLs, and scheduled posts.
+- Read `docs/runbooks/blog-authoring.md` for blog frontmatter, reposts/cross-posts, why the ashwch.com workflow is stub-based here, review URLs, and scheduled posts.
 - Read `docs/route-ownership.md`, `docs/content-governance.md`, `docs/editing-recipes.md`, and `docs/editorial-workflow.md` when you need ownership or editorial decisions.
 
 ## Repo Map
@@ -65,7 +65,7 @@ export AGENT_SKILLS_REPO_DIR=/absolute/path/to/agent-skills-marketplace
 - `docs/architecture/overview.md` — system boundaries, source-of-truth map, build/deploy flow
 - `docs/quality/gates.md` — required commands, CI jobs, common failures, golden rules
 - `docs/runbooks/development.md` — daily development loop, local CI simulation, lock-file updates
-- `docs/runbooks/blog-authoring.md` — original vs repost schema, draft previews, scheduled posts, AI disclaimer block
+- `docs/runbooks/blog-authoring.md` — original vs repost schema, first-principles ashwch.com cross-post workflow, draft previews, scheduled posts, AI disclaimer block
 - `docs/maintainer-quickstart.md` — fastest path from task to file
 - `docs/local-dev.md` — first-time setup and source-repo resolution
 - `docs/route-ownership.md` — exact route ownership across this repo and ASM

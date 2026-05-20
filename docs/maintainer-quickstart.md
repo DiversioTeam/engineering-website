@@ -20,11 +20,12 @@ If you need to make a routine change to the engineering site, start here. This g
 | Systems highlights | `src/data/engineering-highlights.ts` | Used by both `/systems` and `/how-we-work` |
 | Featured tools on homepage | `src/data/agentic-tools.ts` → `homepageFeaturedPluginSlugs` | Array of plugin slugs |
 | Featured tools on `/agentic-tools` | `src/data/agentic-tools.ts` → `toolsPageFeaturedPluginSlugs` | |
-| A new blog post | `src/content/blog/<slug>.md` | See `docs/runbooks/blog-authoring.md` for frontmatter schema |
+| A new blog post | `src/content/blog/<slug>.md` | See `docs/runbooks/blog-authoring.md` for frontmatter schema, repost rules, and the ashwch.com cross-post workflow |
+| A blog post that is canonical on ashwch.com | `src/content/blog/<slug>.md` | Use the repost-stub workflow in `docs/runbooks/blog-authoring.md`; keep the engineering copy short on purpose |
 | A review-only draft blog URL | `src/content/blog/<slug>.md` → `draft: true` + `previewToken: ...` | Builds at `/blog/review/<previewToken>/<slug>/` without appearing on `/blog`; token should be lowercase words/ids with hyphen separators |
 | A future-dated scheduled post | `src/content/blog/<slug>.md` → future `publishDate` | Builds at normal `/blog/<slug>/`, shows a restricted preview until that date, and stays out of `/blog` until a fresh deploy |
 | The AI writing disclaimer block | Blog markdown HTML block | Use the reusable `.ai-disclaimer` snippet documented in `docs/runbooks/blog-authoring.md` |
-| Blog ordering / featured post | `src/content/blog/<slug>.md` → `featured: true` | Only one post at a time; logic in `utils/pick-featured-blog-post.ts` |
+| Blog ordering / featured post | `src/content/blog/<slug>.md` → `featured: true` | Only one post at a time; avoid featuring repost stubs unless there is a deliberate editorial reason; logic in `utils/pick-featured-blog-post.ts` |
 | Author page content | Derived from blog frontmatter `author.name` | Pages auto-generated from `src/pages/authors/` |
 | A shared CTA or route summary | `src/data/site-entry-points.ts` | Reused across homepage, `/how-we-work`, `/community` |
 | Adding a stack logo | `public/logos/stack/` + add entry in `engineering-stack.ts` | See asset provenance table in `content-governance.md` |

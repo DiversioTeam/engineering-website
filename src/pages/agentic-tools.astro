@@ -26,6 +26,20 @@ const featured = getMarketplaceItemsBySlug(plugins, toolsPageFeaturedPluginSlugs
 const totalSkills = plugins.reduce((sum, p) => sum + p.skills.length, 0);
 const categories = [...new Set(plugins.map((p) => p.category))];
 
+/**
+ * Keep the install example derived from the real package data instead of a
+ * hand-maintained list.
+ *
+ * Why:
+ * - the page already knows the package inventory from marketplace.json
+ * - hardcoding package names here would drift the next time a package is added,
+ *   removed, or renamed
+ * - readers should trust that the example matches the real current bundle
+ */
+const piInstallCode = `pi install git:github.com/DiversioTeam/agent-skills-marketplace
+# installs all pi packages at once:
+# ${piPackages.map((pkg) => pkg.name).join(", ")}`;
+
 const claudePluginInstallCode = `claude plugin marketplace add DiversioTeam/agent-skills-marketplace
 claude plugin install monty-code-review@diversiotech`;
 
@@ -113,9 +127,7 @@ description: >-
             <div class="layer-example">
               <CodeBlock
                 lang="bash"
-                code={`pi install git:github.com/DiversioTeam/agent-skills-marketplace
-# installs all pi packages at once:
-# dev-workflow, skills-bridge, ci-status, oh-my-pi, image-router`}
+                code={piInstallCode}
               />
             </div>
           </div>

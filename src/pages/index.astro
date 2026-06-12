@@ -58,6 +58,7 @@ function getPostSlug(post: { id: string; data: { slug?: string } }) {
         </p>
         <div class="home-actions">
           <a href={siteConfig.routes.howWeWork} class="btn btn-primary btn-md">How We Work</a>
+          <a href={siteConfig.routes.internships} class="btn btn-secondary btn-md">See internship work</a>
           <a href={siteConfig.routes.tools} class="btn btn-secondary btn-md">Explore {siteConfig.toolsSectionName}</a>
           <a href={siteConfig.githubUrl} class="btn btn-secondary btn-md" target="_blank" rel="noopener noreferrer" aria-label="DiversioTeam on GitHub">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -143,9 +144,21 @@ function getPostSlug(post: { id: string; data: { slug?: string } }) {
           <span class="label-caps site-map-link">{siteEntryPoints.tools.cta} →</span>
         </a>
 
-        <a href={siteEntryPoints.blog.href} class="site-map-row">
+        <a href={siteConfig.routes.internships} class="site-map-row">
           <div class="site-map-row-meta">
             <span class="code-text-sm">03</span>
+            <span class="label-caps">5 stories · 275+ production changes</span>
+          </div>
+          <div class="site-map-row-body">
+            <h3 class="headline-sm">Internships</h3>
+            <p class="body-md">See what interns have actually built here, including systems the team still uses after the internship ends.</p>
+          </div>
+          <span class="label-caps site-map-link">See internship stories →</span>
+        </a>
+
+        <a href={siteEntryPoints.blog.href} class="site-map-row">
+          <div class="site-map-row-meta">
+            <span class="code-text-sm">04</span>
             <span class="label-caps">{writingMeta}</span>
           </div>
           <div class="site-map-row-body">

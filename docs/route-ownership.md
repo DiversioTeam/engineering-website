@@ -22,6 +22,7 @@ The site renders from one repo (`engineering-website`) but some content lives in
 | `/how-we-work` | engineering-website | engineering-website |
 | `/systems` | engineering-website | engineering-website |
 | `/community` | engineering-website | engineering-website |
+| `/internships` | engineering-website | engineering-website |
 | `/agentic-tools` | engineering-website | agent-skills-marketplace (`marketplace.json`, catalog metadata) |
 | `/blog` | engineering-website | engineering-website (`src/content/blog/`) |
 | `/authors` | engineering-website | engineering-website (derived from blog content) |

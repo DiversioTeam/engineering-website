@@ -11,6 +11,7 @@ If you need to make a routine change to the engineering site, start here. This g
 | Page copy on `/how-we-work` | `src/pages/how-we-work.astro` | Hero text is at top; data-driven content below uses imports |
 | Page copy on `/systems` | `src/pages/systems.astro` | Hero text at top; stack data from `engineering-stack.ts` |
 | Page copy on `/community` | `src/pages/community.astro` | Hero text at top; contribution links use `agentSkillsRepoUrl` |
+| Page copy on `/internships` | `src/pages/internships.astro` + `src/data/internship-stories.ts` | Editorial page backed by PR-history summaries and linked representative work |
 | Page copy on `/` (homepage) | `src/pages/index.astro` | Hero text + sections; featured tools from `agentic-tools.ts` |
 | The site name or a nav label | `site.config.mjs` | One place — updates Header, Footer, and all meta tags |
 | A section label in the footer | `site.config.mjs` → `navItems` | |

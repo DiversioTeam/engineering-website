@@ -1,0 +1,447 @@
+---
+import PageLayout from "../layouts/PageLayout.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import { internshipProgramSnapshot, internshipStories } from "../data/internship-stories";
+import { siteConfig } from "../../site.config.mjs";
+
+const internshipsPage = {
+  title: "Internships at Diversio Engineering",
+  metaDescription:
+    "Interns at Diversio Engineering ship real product work, improve internal systems, and sometimes build tools the team keeps using after the internship ends.",
+  heroTitle: "Interns here do work the team actually depends on",
+  heroDescription:
+    "Some of it lands in the product. Some of it improves the machinery around the product. The best of it keeps paying off after the internship is over.",
+} as const;
+---
+
+<PageLayout
+  title={internshipsPage.title}
+  description={internshipsPage.metaDescription}
+  ogImage="/og-default.png"
+  socialImageAlt="Diversio Engineering internship work"
+  currentNav="internships"
+>
+  <section class="page-section page-hero">
+    <SectionHeader
+      label="Internships"
+      title={internshipsPage.heroTitle}
+      titleLevel="h1"
+      description={internshipsPage.heroDescription}
+      variant="editorial"
+    />
+
+    <div class="hero-grid">
+      <div class="hero-copy-card">
+        <p class="body-lg">
+          Past interns here have shipped product changes, improved team workflows,
+          and built systems that stayed useful after they left.
+        </p>
+        <p class="body-md">
+          {internshipProgramSnapshot.methodology}
+        </p>
+      </div>
+
+      <div class="stats-card">
+        <div class="stat-row">
+          <span class="stat-value">{internshipProgramSnapshot.internCount}</span>
+          <span class="stat-label label-caps">Stories on this page</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-value">{internshipProgramSnapshot.shippedChangesLabel}</span>
+          <span class="stat-label label-caps">Shipped work behind these examples</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-value">{internshipProgramSnapshot.periodLabel}</span>
+          <span class="stat-label label-caps">Time span</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section page-section--split">
+    <div>
+      <SectionHeader
+        label="A concrete example"
+        title="Naboo started as intern work and became real engineering infrastructure"
+        description="It is one of the clearest examples on this page because the team still relies on it."
+        variant="editorial"
+      />
+      <div class="narrative-card">
+        <p class="body-md">
+          Naboo grew out of a very ordinary engineering problem: too much workflow knowledge was trapped in people. Someone had to remember what a PR needed, whether CI had done the right thing, whether a merge was risky, and what signal the rest of the team actually needed to see.
+        </p>
+        <p class="body-md">
+          The answer was not another checklist. It was software. Naboo became a GitHub-native workflow service that reacts to pull request events, comments, releases, review state, and CI signals. It can explain CI, steer CI behavior, surface risky merges, and enrich release communication. That is a much better example of what this internship can look like than a tidy feature ticket. It is systems work that compounds because the whole team benefits from it.
+        </p>
+        <p class="body-md">
+          The simplest proof is that the team still uses it. The work lasted because it solved a real problem well enough to become part of the workflow.
+        </p>
+      </div>
+    </div>
+
+    <div class="diagram-card" aria-label="Naboo case study visual">
+      <div class="diagram-header">
+        <span class="label-caps">Why Naboo mattered</span>
+        <span class="code-text-sm">problem → system → payoff</span>
+      </div>
+      <div class="diagram-story-grid">
+        <section class="diagram-story-panel diagram-story-panel--problem">
+          <span class="label-caps">The problem</span>
+          <h3 class="headline-sm">Too much workflow lived in people</h3>
+          <ul class="diagram-story-list">
+            <li class="body-md">PR state, review state, CI, and releases kept drifting apart.</li>
+            <li class="body-md">Engineers had to remember hidden rules and keep too much coordination in their heads.</li>
+            <li class="body-md">The team had signal everywhere, but not enough trustworthy signal in one place for humans to act on confidently.</li>
+          </ul>
+        </section>
+
+        <section class="diagram-story-panel diagram-story-panel--build">
+          <span class="label-caps">What got built</span>
+          <h3 class="headline-sm">Naboo</h3>
+          <ul class="diagram-story-list">
+            <li class="body-md">A GitHub-native workflow service built around webhook events.</li>
+            <li class="body-md">It interprets review state, CI state, release activity, and repo-specific policy.</li>
+            <li class="body-md">It keeps humans in the loop by making the right signal visible where people are already making decisions.</li>
+          </ul>
+        </section>
+
+        <section class="diagram-story-panel diagram-story-panel--impact">
+          <span class="label-caps">Why it stuck</span>
+          <h3 class="headline-sm">The team kept using it</h3>
+          <ul class="diagram-story-list">
+            <li class="body-md">Less manual cleanup around reviews, CI, and release communication.</li>
+            <li class="body-md">More consistent workflow behavior without taking judgment away from the people doing the work.</li>
+            <li class="body-md">A piece of intern-built infrastructure that became part of daily engineering work.</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <SectionHeader
+      label="What the work can look like"
+      title="Three stories that say more than a job description can"
+      description="Different projects, different tools, same pattern: the work matters and somebody has to trust you with it."
+      variant="editorial"
+    />
+
+    <div class="story-list">
+      {internshipStories.map((story) => (
+        <article class="story-card">
+          <span class="label-caps story-eyebrow">{story.eyebrow}</span>
+          <h2 class="headline-md story-title">{story.title}</h2>
+          <div class="story-tool-row" aria-label={`${story.title} tools`}>
+            {story.tools.map((tool) => (
+              <div class={`story-tool${tool.wide ? " story-tool--wide" : ""}`}>
+                <img src={tool.logoSrc} alt={tool.logoAlt} class={`story-tool-logo${tool.wide ? " story-tool-logo--wide" : ""}`} loading="lazy" />
+                <span class="code-text-sm story-tool-name">{tool.name}</span>
+              </div>
+            ))}
+          </div>
+          <p class="body-sm story-tools"><strong>Worked with:</strong> {story.toolsLabel}</p>
+          <p class="body-md story-summary">{story.summary}</p>
+          <p class="body-md story-detail">{story.detail}</p>
+          <ul class="story-outcomes">
+            {story.outcomes.map((outcome) => (
+              <li class="body-md">{outcome}</li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="page-section">
+    <SectionHeader
+      label="Why intern at Diversio"
+      title="The internship is designed around real engineering work"
+      description="If you want a term where the work matters, the feedback is serious, and the systems are real, this is the point."
+      variant="editorial"
+    />
+
+    <div class="takeaways-grid">
+      <div class="takeaway-card">
+        <h3 class="headline-sm">You work on problems that are actually live</h3>
+        <p class="body-md">The stories on this page are not sandbox exercises. They involve production workflows, internal systems, CI behavior, customer-facing analytics, and tooling the team depends on.</p>
+      </div>
+      <div class="takeaway-card">
+        <h3 class="headline-sm">You get trust by becoming useful</h3>
+        <p class="body-md">People are not handed fake ownership to make the internship sound good. The pattern here is simpler: learn fast, ship well, earn trust, then take on more consequential work.</p>
+      </div>
+      <div class="takeaway-card">
+        <h3 class="headline-sm">You leave with sharper engineering judgment</h3>
+        <p class="body-md">The most valuable work here is not just about writing code. It is about understanding tradeoffs, operator needs, failure modes, and how to build systems other engineers can trust.</p>
+      </div>
+    </div>
+
+    <div class="closing-links">
+      <a href={siteConfig.routes.howWeWork} class="label-caps">How we work →</a>
+      <a href={siteConfig.routes.systems} class="label-caps">Systems →</a>
+      <a href={siteConfig.routes.community} class="label-caps">Community →</a>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .page-section {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-margin) var(--space-3xl);
+  }
+
+  .page-hero {
+    padding-top: var(--space-3xl);
+  }
+
+  .page-section + .page-section {
+    border-top: var(--border-hairline);
+    padding-top: var(--space-3xl);
+  }
+
+  .hero-grid,
+  .story-list,
+  .takeaways-grid,
+  .story-tool-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .hero-copy-card,
+  .stats-card,
+  .narrative-card,
+  .diagram-card,
+  .story-card,
+  .takeaway-card {
+    background: var(--color-surface);
+    border: var(--border-hairline);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-block-sm);
+  }
+
+  .hero-copy-card,
+  .stats-card,
+  .narrative-card,
+  .story-card,
+  .takeaway-card {
+    padding: var(--space-lg);
+  }
+
+  .hero-copy-card,
+  .narrative-card,
+  .story-card,
+  .takeaway-card {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .hero-copy-card p,
+  .narrative-card p,
+  .story-summary,
+  .story-detail,
+  .story-tools,
+  .takeaway-card p {
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .stats-card {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .stat-row {
+    display: grid;
+    gap: 0.2rem;
+    padding-bottom: var(--space-sm);
+    border-bottom: var(--border-hairline);
+  }
+
+  .stat-row:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .stat-value {
+    color: var(--color-primary);
+    font: var(--font-display-sm);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .stat-label,
+  .story-eyebrow,
+  .story-tools {
+    color: var(--color-text-muted);
+  }
+
+  .page-section--split {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .diagram-card {
+    padding: var(--space-lg);
+    display: grid;
+    gap: var(--space-md);
+    align-self: start;
+  }
+
+  .diagram-header {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    color: var(--color-text-muted);
+    flex-wrap: wrap;
+  }
+
+  .diagram-card svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .diagram-box {
+    fill: var(--color-surface-low);
+    stroke: var(--color-border);
+    stroke-width: 1.5;
+  }
+
+  .diagram-box--input {
+    fill: color-mix(in srgb, var(--color-primary) 6%, var(--color-surface));
+  }
+
+  .diagram-box--core {
+    fill: url(#nabooGlow);
+    stroke: color-mix(in srgb, var(--color-primary) 45%, var(--color-border));
+    stroke-width: 2;
+  }
+
+  .diagram-core-inner {
+    fill: var(--color-surface);
+    stroke: color-mix(in srgb, var(--color-primary) 18%, var(--color-border));
+    stroke-width: 1.5;
+  }
+
+  .diagram-box--output {
+    fill: color-mix(in srgb, var(--color-primary) 3%, var(--color-surface));
+  }
+
+  .diagram-line {
+    fill: none;
+    stroke: color-mix(in srgb, var(--color-primary) 42%, var(--color-text-muted));
+    stroke-width: 2.5;
+    stroke-linecap: round;
+  }
+
+  .diagram-arrow-head {
+    fill: color-mix(in srgb, var(--color-primary) 42%, var(--color-text-muted));
+  }
+
+  .diagram-kicker {
+    font: var(--font-label-caps);
+    fill: var(--color-text-muted);
+    letter-spacing: 0.08em;
+  }
+
+  .diagram-title,
+  .diagram-core-title {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 600;
+    fill: var(--color-text-primary);
+  }
+
+  .diagram-core-title {
+    font-size: 22px;
+  }
+
+  .diagram-copy {
+    font-family: var(--font-body);
+    font-size: 14px;
+    fill: var(--color-text-secondary);
+  }
+
+  .story-title,
+  .takeaway-card h3 {
+    text-wrap: balance;
+  }
+
+  .story-tool-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    align-items: center;
+  }
+
+  .story-tool {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 0.45rem 0.7rem;
+    border: var(--border-hairline);
+    border-radius: 999px;
+    background: var(--color-surface-low);
+    min-width: 0;
+  }
+
+  .story-tool-logo {
+    width: 1rem;
+    height: 1rem;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .story-tool-logo--wide {
+    width: auto;
+    max-width: 2rem;
+    height: 1rem;
+  }
+
+  .story-tool-name {
+    color: var(--color-text-secondary);
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .story-outcomes {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+
+  .story-outcomes li + li {
+    margin-top: var(--space-sm);
+  }
+
+  .closing-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin-top: var(--space-xl);
+  }
+
+  .closing-links a {
+    text-decoration: none;
+  }
+
+  @media (min-width: 48rem) {
+    .hero-grid,
+    .takeaways-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 72rem) {
+    .page-section--split,
+    .hero-grid {
+      grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+      align-items: start;
+    }
+
+    .takeaways-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+  }
+</style>

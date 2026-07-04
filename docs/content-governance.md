@@ -214,6 +214,8 @@ Stack logos live in `public/logos/stack/`.
 | `sandboxes.svg` | `https://sandboxes.cloud/icon.svg` | official icon |
 | `ngrok.png` | `https://ngrok.com/assets/apple-touch-icon.png` | icon-grade fallback |
 | `cmux.png` | `https://cmux.com/logo.png` | official cmux logo |
+| `codex.png` | `https://developers.openai.com/favicon.png` | favicon-grade fallback for Codex docs |
+| `anthropic.png` | `https://platform.claude.com/favicon-32x32.png` | favicon-grade fallback for Anthropic docs |
 
 If a better official asset becomes available later:
 - replace the local file in place when possible

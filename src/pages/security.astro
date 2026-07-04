@@ -22,8 +22,8 @@ import { siteConfig } from "../../site.config.mjs";
     />
     <FeatureList
       features={[
-        { label: "Markdown-first skills", description: "Claude Code skills are primarily markdown instruction files. The harness executes tools, not the markdown itself." },
-        { label: "Pi packages can ship code", description: "Pi packages may include TypeScript extensions under pi-packages/**/extensions/. Treat those like installable source code, not like passive docs." },
+        { label: "Markdown-first skills", description: "Claude Code skills are primarily markdown instruction files. The markdown provides instructions while the harness executes tools." },
+        { label: "Pi packages can ship code", description: "Pi packages may include TypeScript extensions under pi-packages/**/extensions/. Treat those like installable source code and review them accordingly." },
         { label: "Build and manifest validation", description: "CI validates manifests, package structure, and website builds so broken metadata and obvious shape problems are caught before merge." },
         { label: "Inspectable source", description: "Published skills, package READMEs, and extension files live in this repository so engineers can inspect what they are installing." },
       ]}

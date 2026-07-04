@@ -20,6 +20,7 @@ import { getSiteMetrics } from "../utils/site-metrics";
 import { homepageFeaturedPluginSlugs } from "../data/agentic-tools";
 import { plugins } from "../data/marketplace.json";
 import { openSourceProjects } from "../data/open-source-projects";
+import { internshipExampleCount, internshipProgramSnapshot } from "../data/internship-stories";
 import { siteEntryPoints } from "../data/site-entry-points";
 import { getMarketplaceItemsBySlug } from "../utils/marketplace-content";
 import { siteConfig } from "../../site.config.mjs";
@@ -37,6 +38,65 @@ const writingMeta = publishedPosts.length === 0
       ? `${metrics.originalPostCount} original post${metrics.originalPostCount === 1 ? "" : "s"}`
       : `${metrics.repostCount} curated repost${metrics.repostCount === 1 ? "" : "s"}`;
 const featuredWritingPost = pickFeaturedBlogPost(publishedPosts);
+const homeProofNote = `Includes ${internshipProgramSnapshot.shippedChangesLabel} across ${internshipExampleCount} internship examples from recent cohorts across ${internshipProgramSnapshot.periodValue}.`;
+const homeTopicLabels = [
+  "Team habits",
+  "Systems notes",
+  "Open tools",
+  "Writing",
+  "Internships",
+] as const;
+const homeProofCards = [
+  { value: String(metrics.pluginCount), label: "Plugins" },
+  { value: String(metrics.totalSkills), label: "Skills" },
+  { value: String(metrics.stackLayerCount), label: "Stack layers" },
+  { value: summaryWritingValue, label: summaryWritingLabel },
+  { value: String(metrics.openRepoCount), label: "Open repos" },
+  { value: internshipProgramSnapshot.shippedChangesValue, label: "Production changes" },
+] as const;
+const homePathCards = [
+  {
+    label: siteEntryPoints.howWeWork.label,
+    title: siteEntryPoints.howWeWork.title,
+    description: siteEntryPoints.howWeWork.description,
+    href: siteEntryPoints.howWeWork.href,
+    cta: siteEntryPoints.howWeWork.cta,
+    meta: "standards · habits",
+    featured: true,
+  },
+  {
+    label: siteEntryPoints.systems.label,
+    title: siteEntryPoints.systems.title,
+    description: siteEntryPoints.systems.description,
+    href: siteEntryPoints.systems.href,
+    cta: siteEntryPoints.systems.cta,
+    meta: `${metrics.stackLayerCount} stack layers`,
+  },
+  {
+    label: siteEntryPoints.tools.label,
+    title: siteEntryPoints.tools.title,
+    description: siteEntryPoints.tools.description,
+    href: siteEntryPoints.tools.href,
+    cta: siteEntryPoints.tools.cta,
+    meta: `${metrics.pluginCount} plugins · ${metrics.totalSkills} skills`,
+  },
+  {
+    label: "Internships",
+    title: "See what interns actually ship",
+    description: "Representative work across product features, internal tooling, and systems the team still uses.",
+    href: siteConfig.routes.internships,
+    cta: "See internship work",
+    meta: `${internshipExampleCount} examples · ${internshipProgramSnapshot.shippedChangesLabel}`,
+  },
+  {
+    label: siteEntryPoints.blog.label,
+    title: siteEntryPoints.blog.title,
+    description: siteEntryPoints.blog.description,
+    href: siteEntryPoints.blog.href,
+    cta: siteEntryPoints.blog.cta,
+    meta: writingMeta,
+  },
+] as const;
 function getPostSlug(post: { id: string; data: { slug?: string } }) {
   return (post.data.slug ?? post.id).replace(/\.md$/, "");
 }
@@ -49,17 +109,17 @@ function getPostSlug(post: { id: string; data: { slug?: string } }) {
   socialImageAlt="Diversio Engineering social preview"
   currentNav="home"
 >
-  <section class="home-hero">
-    <div class="home-hero-grid">
-      <div class="home-hero-copy">
-        <h1 class="home-title">{siteConfig.siteName}</h1>
+  <section class="home-hero schematic-grid">
+    <div class="home-hero-shell">
+      <div class="home-hero-copy-card">
+        <span class="label-caps home-kicker">{siteConfig.siteName}</span>
+        <h1 class="home-title">Engineering systems, open tools, and the way we work</h1>
         <p class="body-lg home-desc">
-          Engineering systems, open tools, deep docs, and writing from Diversio.
+          We publish working habits, systems notes, open-source tools, internship work, and writing from the team. If you want to understand how Diversio Engineering builds, this is the front door.
         </p>
         <div class="home-actions">
-          <a href={siteConfig.routes.howWeWork} class="btn btn-primary btn-md">How We Work</a>
-          <a href={siteConfig.routes.internships} class="btn btn-secondary btn-md">See internship work</a>
-          <a href={siteConfig.routes.tools} class="btn btn-secondary btn-md">Explore {siteConfig.toolsSectionName}</a>
+          <a href={siteConfig.routes.howWeWork} class="btn btn-primary btn-md">Start with How We Work</a>
+          <a href={siteConfig.routes.systems} class="btn btn-secondary btn-md">Explore Systems</a>
           <a href={siteConfig.githubUrl} class="btn btn-secondary btn-md" target="_blank" rel="noopener noreferrer" aria-label="DiversioTeam on GitHub">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
@@ -67,107 +127,50 @@ function getPostSlug(post: { id: string; data: { slug?: string } }) {
             GitHub
           </a>
         </div>
+        <div class="home-topic-list" aria-label="Site topics">
+          {homeTopicLabels.map((homeTopicLabel) => (
+            <span class="home-topic-chip">{homeTopicLabel}</span>
+          ))}
+        </div>
       </div>
 
-      <div class="home-summary-card">
-        <div class="summary-header">
-          <span class="label-caps">At a glance</span>
-          <span class="code-text-sm summary-id">OVERVIEW</span>
+      <aside class="home-proof-card" aria-label="Site proof points">
+        <div class="home-proof-header">
+          <span class="label-caps">In the open</span>
+          <span class="code-text-sm">Diversio Engineering</span>
         </div>
-        <div class="summary-grid">
-          <div class="summary-stat">
-            <span class="summary-stat-num">{metrics.pluginCount}</span>
-            <span class="label-caps summary-stat-label">Plugins</span>
-          </div>
-          <div class="summary-stat">
-            <span class="summary-stat-num">{metrics.piPackageCount}</span>
-            <span class="label-caps summary-stat-label">Pi Packages</span>
-          </div>
-          <div class="summary-stat">
-            <span class="summary-stat-num">{metrics.totalSkills}</span>
-            <span class="label-caps summary-stat-label">Skills</span>
-          </div>
-          <div class="summary-stat">
-            <span class="summary-stat-num">{summaryWritingValue}</span>
-            <span class="label-caps summary-stat-label">{summaryWritingLabel}</span>
-          </div>
+        <div class="home-proof-grid">
+          {homeProofCards.map((homeProofCard) => (
+            <div class="home-proof-item">
+              <span class="home-proof-value">{homeProofCard.value}</span>
+              <span class="label-caps home-proof-label">{homeProofCard.label}</span>
+            </div>
+          ))}
         </div>
-        <div class="summary-note body-md">
-          Systems thinking, open tools, and engineering writing in one place.
-        </div>
-      </div>
+        <p class="body-md home-proof-note">{homeProofNote}</p>
+      </aside>
     </div>
   </section>
 
   <section class="page-section">
     <SectionHeader
-      label="Sections"
-      title="Explore the site"
-      description="Start with how we work, explore key systems, browse the tools, or read the blog."
+      label="Start here"
+      title="Pick the path that matches what you want"
+      description="Some visitors want team habits. Some want systems. Some want tools. Some want to see the writing or the internship work."
       variant="hub"
     />
-    <div class="site-map">
-      <a href={siteEntryPoints.howWeWork.href} class="site-map-feature">
-        <div class="site-map-feature-header">
-          <span class="label-caps">Featured path</span>
-          <span class="code-text-sm">standards · approach</span>
-        </div>
-        <h3 class="headline-md site-map-feature-title">{siteEntryPoints.howWeWork.title}</h3>
-        <p class="body-md site-map-feature-copy">
-          {siteEntryPoints.howWeWork.description}
-        </p>
-        <span class="label-caps site-map-link">{siteEntryPoints.howWeWork.cta} →</span>
-      </a>
-
-      <div class="site-map-list">
-        <a href={siteEntryPoints.systems.href} class="site-map-row">
-          <div class="site-map-row-meta">
-            <span class="code-text-sm">01</span>
-            <span class="label-caps">{metrics.stackLayerCount} stack layers · {metrics.systemsHighlightCount} highlights</span>
+    <div class="home-path-grid">
+      {homePathCards.map((homePathCard) => (
+        <a href={homePathCard.href} class={`home-path-card${homePathCard.featured ? " home-path-card--featured" : ""}`}>
+          <div class="home-path-header">
+            <span class="label-caps">{homePathCard.label}</span>
+            <span class="code-text-sm home-path-meta">{homePathCard.meta}</span>
           </div>
-          <div class="site-map-row-body">
-            <h3 class="headline-sm">{siteEntryPoints.systems.title}</h3>
-            <p class="body-md">{siteEntryPoints.systems.description}</p>
-          </div>
-          <span class="label-caps site-map-link">{siteEntryPoints.systems.cta} →</span>
+          <h3 class="headline-sm home-path-title">{homePathCard.title}</h3>
+          <p class="body-md home-path-description">{homePathCard.description}</p>
+          <span class="label-caps home-path-link">{homePathCard.cta} →</span>
         </a>
-
-        <a href={siteEntryPoints.tools.href} class="site-map-row">
-          <div class="site-map-row-meta">
-            <span class="code-text-sm">02</span>
-            <span class="label-caps">{metrics.pluginCount} plugins · {metrics.totalSkills} skills</span>
-          </div>
-          <div class="site-map-row-body">
-            <h3 class="headline-sm">{siteEntryPoints.tools.title}</h3>
-            <p class="body-md">{siteEntryPoints.tools.description}</p>
-          </div>
-          <span class="label-caps site-map-link">{siteEntryPoints.tools.cta} →</span>
-        </a>
-
-        <a href={siteConfig.routes.internships} class="site-map-row">
-          <div class="site-map-row-meta">
-            <span class="code-text-sm">03</span>
-            <span class="label-caps">5 stories · 275+ production changes</span>
-          </div>
-          <div class="site-map-row-body">
-            <h3 class="headline-sm">Internships</h3>
-            <p class="body-md">See what interns have actually built here, including systems the team still uses after the internship ends.</p>
-          </div>
-          <span class="label-caps site-map-link">See internship stories →</span>
-        </a>
-
-        <a href={siteEntryPoints.blog.href} class="site-map-row">
-          <div class="site-map-row-meta">
-            <span class="code-text-sm">04</span>
-            <span class="label-caps">{writingMeta}</span>
-          </div>
-          <div class="site-map-row-body">
-            <h3 class="headline-sm">{siteEntryPoints.blog.title}</h3>
-            <p class="body-md">{siteEntryPoints.blog.description}</p>
-          </div>
-          <span class="label-caps site-map-link">{siteEntryPoints.blog.cta} →</span>
-        </a>
-      </div>
+      ))}
     </div>
   </section>
 
@@ -211,7 +214,7 @@ function getPostSlug(post: { id: string; data: { slug?: string } }) {
       <SectionHeader
         label={siteConfig.toolsSectionName}
         title="Featured tools"
-        description="A few standout projects from Agentic Tools."
+        description="Featured projects from Agentic Tools."
         variant="tools"
       />
       <a href={siteConfig.routes.registry} class="catalog-view-all label-caps">View full registry →</a>
@@ -234,7 +237,7 @@ function getPostSlug(post: { id: string; data: { slug?: string } }) {
   <section class="page-section page-section--top-border">
     <SectionHeader
       label="Open Source"
-      title="A few more open source projects"
+      title="More open source projects"
       description="A small curated set of open source repos from Diversio Engineering beyond the Agentic Tools registry."
       variant="hub"
     />
@@ -270,219 +273,184 @@ function getPostSlug(post: { id: string; data: { slug?: string } }) {
 
   .home-hero {
     position: relative;
+    overflow: hidden;
   }
 
   .home-hero::before {
     content: "";
     position: absolute;
     inset: 0;
-    background-image:
-      linear-gradient(to right, var(--grid-pattern-color) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--grid-pattern-color) 1px, transparent 1px);
-    background-size: var(--grid-pattern-size) var(--grid-pattern-size);
+    background:
+      radial-gradient(circle at top right, color-mix(in srgb, var(--color-primary-container) 60%, transparent), transparent 38%),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.96));
     pointer-events: none;
-    opacity: 0.5;
-    z-index: 0;
   }
 
-  .home-hero-grid {
+  .home-hero-shell,
+  .home-path-grid {
     position: relative;
     z-index: 1;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-xl);
-  }
-
-  @media (min-width: 1200px) {
-    .home-hero-grid {
-      grid-template-columns: 3fr 2fr;
-      align-items: start;
-    }
-  }
-
-  .home-hero-copy {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-  }
-
-  .home-title {
-    font-family: var(--font-headline);
-    font-size: clamp(2.5rem, 4vw, var(--text-headline-xl));
-    font-weight: var(--weight-bold);
-    line-height: var(--leading-headline);
-    letter-spacing: var(--tracking-headline);
-    color: var(--color-text);
-    text-wrap: balance;
-    max-width: 12ch;
-  }
-
-  .home-desc {
-    color: var(--color-text-secondary);
-    max-width: 42rem;
-  }
-
-  .home-actions {
-    display: flex;
-    gap: var(--space-sm);
-    flex-wrap: wrap;
-    align-items: stretch;
-  }
-
-  .home-summary-card {
-    background: var(--color-surface);
-    border: var(--border-hairline);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-block);
-    overflow: hidden;
-  }
-
-  .summary-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--space-xs) var(--space-md);
-    background: var(--color-surface-low);
-    border-bottom: var(--border-hairline);
-  }
-
-  .summary-id {
-    color: var(--color-text-muted);
-  }
-
-  .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-sm);
-    padding: var(--space-lg);
-  }
-
-  .summary-stat {
-    border: var(--border-hairline);
-    border-radius: var(--radius-md);
-    padding: var(--space-md);
-    background: var(--color-surface-low);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2xs);
-  }
-
-  .summary-stat-num {
-    font-family: var(--font-headline);
-    font-size: var(--text-headline-lg);
-    color: var(--color-primary);
-    line-height: 1;
-  }
-
-  .summary-stat-label {
-    color: var(--color-text-secondary);
-  }
-
-  .summary-note {
-    color: var(--color-text-secondary);
-    padding: 0 var(--space-lg) var(--space-lg);
-  }
-
-  .site-map {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-lg);
   }
 
-  .site-map-feature,
-  .site-map-row {
+  .home-hero-copy-card,
+  .home-proof-card,
+  .home-path-card {
     background: var(--color-surface);
     border: var(--border-hairline);
     border-radius: 1rem;
     box-shadow: var(--shadow-block-sm);
-    text-decoration: none;
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast), background var(--transition-fast);
   }
 
-  .site-map-feature:hover,
-  .site-map-row:hover {
+  .home-hero-copy-card,
+  .home-proof-card,
+  .home-path-card {
+    padding: clamp(var(--space-lg), 2vw + 0.75rem, var(--space-2xl));
+  }
+
+  .home-hero-copy-card {
+    display: grid;
+    gap: var(--space-lg);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), color-mix(in srgb, var(--color-primary-container) 18%, #ffffff));
+  }
+
+  .home-kicker,
+  .home-topic-chip {
+    color: var(--color-primary);
+  }
+
+  .home-title {
+    font-family: var(--font-headline);
+    font-size: clamp(2.6rem, 4vw, 4.75rem);
+    font-weight: var(--weight-bold);
+    line-height: 1.02;
+    letter-spacing: var(--tracking-headline);
+    color: var(--color-text);
+    text-wrap: balance;
+    max-width: 11ch;
+  }
+
+  .home-desc,
+  .home-proof-note,
+  .home-path-description {
+    color: var(--color-text-secondary);
+  }
+
+  .home-desc {
+    max-width: 45rem;
+  }
+
+  .home-actions,
+  .home-topic-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    align-items: stretch;
+  }
+
+  .home-topic-chip {
+    border: var(--border-hairline);
+    border-radius: 999px;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.92);
+  }
+
+  .home-proof-card {
+    display: grid;
+    gap: var(--space-lg);
+    background: linear-gradient(180deg, var(--color-surface), color-mix(in srgb, var(--color-primary-container) 14%, var(--color-surface)));
+  }
+
+  .home-proof-header,
+  .home-path-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: var(--space-sm);
+  }
+
+  .home-proof-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-sm);
+  }
+
+  .home-proof-item {
+    display: grid;
+    gap: var(--space-2xs);
+    padding: var(--space-md);
+    border: var(--border-hairline);
+    border-radius: 0.875rem;
+    background: rgba(255, 255, 255, 0.88);
+  }
+
+  .home-proof-value {
+    font-family: var(--font-headline);
+    font-size: clamp(1.35rem, 1.05rem + 0.6vw, 2rem);
+    font-weight: var(--weight-semibold);
+    line-height: 1.05;
+    color: var(--color-text);
+  }
+
+  .home-proof-label,
+  .home-path-meta {
+    color: var(--color-text-muted);
+  }
+
+  .home-proof-note {
+    margin: 0;
+  }
+
+  .home-path-card {
+    text-decoration: none;
+    display: grid;
+    gap: var(--space-sm);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast), background var(--transition-fast);
+    height: 100%;
+  }
+
+  .home-path-card:hover,
+  .home-path-card:focus-visible {
     border-color: var(--color-primary);
     box-shadow: var(--shadow-block);
     transform: translateY(-1px);
   }
 
-  .site-map-feature {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-    padding: clamp(var(--space-lg), 2vw + 0.75rem, var(--space-2xl));
-    background: linear-gradient(180deg, var(--color-surface), color-mix(in srgb, var(--color-primary-container) 28%, var(--color-surface)));
+  .home-path-card--featured {
+    background: linear-gradient(180deg, var(--color-surface), color-mix(in srgb, var(--color-primary-container) 22%, var(--color-surface)));
   }
 
-  .site-map-feature-header,
-  .site-map-row-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: var(--space-sm);
-    color: var(--color-text-muted);
-    min-width: 0;
-  }
-
-  .site-map-feature-title {
+  .home-path-title {
     margin: 0;
-    max-width: 14ch;
+    color: var(--color-text);
     text-wrap: balance;
   }
 
-  .site-map-feature-copy,
-  .site-map-row-body p {
-    color: var(--color-text-secondary);
-    margin: 0;
-  }
-
-  .site-map-list {
-    display: grid;
-    gap: var(--space-md);
-  }
-
-  .site-map-row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-md);
-    padding: var(--space-lg);
-  }
-
-  .site-map-row-body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-    min-width: 0;
-  }
-
-  .site-map-row-body h3 {
-    margin: 0;
-  }
-
-  .site-map-link {
+  .home-path-link {
     color: var(--color-primary);
+    margin-top: auto;
   }
 
-  @media (min-width: 1100px) {
-    .site-map {
-      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  @media (min-width: 900px) {
+    .home-path-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .home-path-card--featured {
+      grid-column: span 2;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .home-hero-shell {
+      grid-template-columns: minmax(0, 1.15fr) minmax(22rem, 0.85fr);
       align-items: stretch;
     }
 
-    .site-map-list {
-      gap: var(--space-lg);
-    }
-
-    .site-map-row {
-      grid-template-columns: 10rem minmax(0, 1fr) auto;
-      align-items: start;
-      gap: var(--space-lg);
-    }
-
-    .site-map-row-meta {
-      flex-direction: column;
-      align-items: flex-start;
-      padding-top: 0.15rem;
+    .home-path-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
@@ -674,8 +642,8 @@ function getPostSlug(post: { id: string; data: { slug?: string } }) {
       padding: var(--space-2xl) var(--space-md);
     }
 
-    .home-hero-grid {
-      gap: var(--space-lg);
+    .home-title {
+      max-width: none;
     }
 
     .home-actions > .btn,
@@ -683,19 +651,15 @@ function getPostSlug(post: { id: string; data: { slug?: string } }) {
       width: 100%;
     }
 
-    .summary-grid {
+    .home-proof-grid {
       grid-template-columns: 1fr;
-    }
-
-    .summary-stat {
-      padding: var(--space-sm) var(--space-md);
     }
 
     .catalog-header,
     .latest-post-meta,
     .latest-post-footer,
-    .site-map-feature-header,
-    .site-map-row-meta,
+    .home-proof-header,
+    .home-path-header,
     .project-card-header {
       align-items: flex-start;
       flex-direction: column;
@@ -706,8 +670,7 @@ function getPostSlug(post: { id: string; data: { slug?: string } }) {
       text-align: left;
     }
 
-    .latest-post-title,
-    .site-map-feature-title {
+    .latest-post-title {
       max-width: none;
     }
   }

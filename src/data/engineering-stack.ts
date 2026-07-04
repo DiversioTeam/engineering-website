@@ -3,6 +3,7 @@ export interface EngineeringStackTechnology {
   logoSrc: string;
   logoAlt: string;
   wide?: boolean;
+  href?: string;
 }
 
 export interface EngineeringStackLayer {
@@ -58,7 +59,7 @@ export const engineeringStack: EngineeringStackLayer[] = [
     summary:
       "Infrastructure is treated as part of the engineering system, with managed cloud primitives, infrastructure as code, and orchestration that stays legible across many stacks and environments.",
     whyItFits:
-      "The goal is not novelty. It is repeatability, safer change management, and infrastructure work that can be reasoned about with the same care as product code.",
+      "We want repeatability, safer change management, and infrastructure work that can be reasoned about with the same care as product code.",
     technologies: [
       { name: "AWS", logoSrc: "/logos/stack/aws.png", logoAlt: "AWS logo", wide: true },
       { name: "Terraform", logoSrc: "/logos/stack/terraform.svg", logoAlt: "Terraform icon" },
@@ -70,7 +71,7 @@ export const engineeringStack: EngineeringStackLayer[] = [
     label: "Delivery and automation",
     title: "GitHub Actions and CircleCI automate the delivery paths that need to stay boring",
     summary:
-      "CI and release automation are part of the operating model, not afterthoughts. Different repositories lean on different automation surfaces depending on how they deploy and what they need to validate.",
+      "CI and release automation sit inside the operating model. Different repositories lean on different automation surfaces depending on how they deploy and what they need to validate.",
     whyItFits:
       "Keeping build, packaging, and deployment paths explicit makes change safer, easier to audit, and easier to recover when something drifts.",
     technologies: [
@@ -84,7 +85,7 @@ export const engineeringStack: EngineeringStackLayer[] = [
     label: "Data and analytics",
     title: "Product analytics and event contracts matter because instrumentation is part of the product",
     summary:
-      "Analytics work is treated as a real engineering surface, not a bolt-on. Events, data flow, and implementation patterns need to stay clear enough that teams can trust what gets measured.",
+      "Analytics work is treated as an engineering surface. Events, data flow, and implementation patterns need to stay clear enough that teams can trust what gets measured.",
     whyItFits:
       "Instrumentation is only useful when it stays close to the product behavior it describes and when engineers can evolve it without turning the data model into folklore.",
     technologies: [
@@ -113,17 +114,36 @@ export const engineeringStack: EngineeringStackLayer[] = [
   {
     slug: "workflow",
     label: "Workflow and publishing tooling",
-    title: "Bruno, Astro, uv, Ruff, and agentic tooling support the way we ship",
+    title: "Bruno, Astro, uv, Ruff, agentic tooling, and coding models support the way we ship",
     summary:
-      "We invest in tools that improve context recovery, review quality, API visibility, and the speed at which repeated engineering work becomes reusable instead of staying trapped in local setup.",
+      "We invest in tools that improve context recovery, review quality, API visibility, and the speed at which repeated engineering work becomes reusable instead of staying trapped in local setup. That daily workflow now includes regular use of OpenAI Codex and Anthropic models for drafting, review, debugging, and explanation.",
     whyItFits:
-      "Open-source tooling earns its place when it makes daily engineering work simpler, easier to review, and easier to share across the team. Docs, request definitions, local workflow tools, and agentic helpers all benefit from staying close to the code they support.",
+      "These tools earn their place when they shorten feedback loops and keep the work inspectable. Docs, request definitions, local workflow tools, agentic helpers, and strong coding models all help when they stay close to the code and reasoning they support.",
     technologies: [
       { name: "Bruno", logoSrc: "/logos/stack/bruno.png", logoAlt: "Bruno logo", wide: true },
       { name: "Astro", logoSrc: "/logos/stack/astro.svg", logoAlt: "Astro logo" },
       { name: "uv", logoSrc: "/logos/stack/uv.svg", logoAlt: "Astral logo for uv", wide: true },
       { name: "Ruff", logoSrc: "/logos/stack/ruff.svg", logoAlt: "Astral logo for Ruff", wide: true },
       { name: "Agentic Tools", logoSrc: "/favicon.svg", logoAlt: "Diversio mark" },
+      {
+        name: "Codex",
+        logoSrc: "/logos/stack/codex.png",
+        logoAlt: "Codex logo",
+        href: "https://developers.openai.com/codex/overview",
+      },
+      {
+        name: "Anthropic",
+        logoSrc: "/logos/stack/anthropic.png",
+        logoAlt: "Anthropic logo",
+        href: "https://platform.claude.com/docs/en/about-claude/models/overview",
+      },
+    ],
+    supportingTools: [
+      "Codex 5.4",
+      "Codex 5.5",
+      "Anthropic Fable",
+      "Anthropic Opus",
+      "Anthropic Sonnet",
     ],
     relatedHref: "/blog/from-postman-to-bruno-how-ai-changed-our-api-workflow",
     relatedLabel: "Related writing",

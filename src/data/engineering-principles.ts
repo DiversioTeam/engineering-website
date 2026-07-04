@@ -5,23 +5,33 @@ export interface EngineeringPrinciple {
 
 export const engineeringPrinciples: EngineeringPrinciple[] = [
   {
-    label: "Real systems over toy demos",
+    label: "Put Diversio and clients first",
     description:
-      "We talk about shipping, review, reliability, cost, and product constraints, not just prompts or playground experiments.",
+      "We look for the best outcome for the company and the people we serve, even when that asks more of us or cuts against local convenience.",
   },
   {
-    label: "AI with guardrails",
+    label: "High ownership beats waiting",
     description:
-      "Agentic workflows are useful when they live inside explicit review paths, quality gates, and fail-closed automation.",
+      "We stay close to the day-to-day work, roll up our sleeves, and bring solutions instead of only pointing at problems.",
   },
   {
-    label: "Documentation is part of the system",
+    label: "Curiosity should reach the whole system",
     description:
-      "Runbooks, first-principles notes, and repo-local guides are treated as engineering assets that make systems safer to operate and easier to extend.",
+      "We learn how things work end to end, question assumptions, notice patterns, and look past symptoms to the underlying issue.",
   },
   {
-    label: "Make context cheap to recover",
+    label: "Respect and humility make the team stronger",
     description:
-      "We invest in docs, shared tools, and clearer workflows so engineers can understand the next step without starting from zero each time.",
+      "We stay open to better ideas, treat everyone with respect, and make time to help colleagues across the company succeed.",
+  },
+  {
+    label: "Details matter, especially under pressure",
+    description:
+      "We pay attention, stay calm when things get stressful, and keep a high bar for quality because small misses grow into larger problems.",
+  },
+  {
+    label: "Keep learning and think long term",
+    description:
+      "We apply what we learn, keep improving, and make decisions with long-term impact in mind instead of chasing the nearest short-term win.",
   },
 ];

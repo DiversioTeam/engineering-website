@@ -27,4 +27,11 @@ export const openSourceProjects = [
     description: "Shared cmux utilities used in Pi-powered terminal workflows.",
     url: "https://github.com/DiversioTeam/pi-cmux",
   },
+  {
+    name: "local-ci-runner",
+    repo: "DiversioTeam/local-ci-runner",
+    category: "Developer workflow",
+    description: "Shared local CI runner for repo-owned verification steps.",
+    url: "https://github.com/DiversioTeam/local-ci-runner",
+  },
 ];

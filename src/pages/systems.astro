@@ -62,12 +62,25 @@ function laneSlug(lane: string): string {
             <p class="body-md stack-copy">{layer.summary}</p>
             <p class="body-md stack-proof"><strong>Why it fits:</strong> {layer.whyItFits}</p>
             <div class="stack-tech-list" aria-label={`${layer.label} technologies`}>
-              {layer.technologies.map((tech) => (
-                <div class={`stack-tech${tech.wide ? " stack-tech--wide" : ""}`}>
-                  <img src={tech.logoSrc} alt={tech.logoAlt} class={`stack-tech-logo${tech.wide ? " stack-tech-logo--wide" : ""}`} loading="lazy" />
-                  <span class="body-md stack-tech-name">{tech.name}</span>
-                </div>
-              ))}
+              {layer.technologies.map((tech) => {
+                const isExternalLink = tech.href?.startsWith("http");
+                return tech.href ? (
+                  <a
+                    href={tech.href}
+                    class={`stack-tech${tech.wide ? " stack-tech--wide" : ""}`}
+                    target={isExternalLink ? "_blank" : undefined}
+                    rel={isExternalLink ? "noopener" : undefined}
+                  >
+                    <img src={tech.logoSrc} alt={tech.logoAlt} class={`stack-tech-logo${tech.wide ? " stack-tech-logo--wide" : ""}`} loading="lazy" />
+                    <span class="body-md stack-tech-name">{tech.name}</span>
+                  </a>
+                ) : (
+                  <div class={`stack-tech${tech.wide ? " stack-tech--wide" : ""}`}>
+                    <img src={tech.logoSrc} alt={tech.logoAlt} class={`stack-tech-logo${tech.wide ? " stack-tech-logo--wide" : ""}`} loading="lazy" />
+                    <span class="body-md stack-tech-name">{tech.name}</span>
+                  </div>
+                );
+              })}
             </div>
             {layer.supportingTools && layer.supportingTools.length > 0 && (
               <div class="stack-supporting-tools">
@@ -291,6 +304,17 @@ function laneSlug(lane: string): string {
     border-radius: 999px;
     background: var(--color-surface-low);
     min-width: 0;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+  }
+
+  .stack-tech:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .stack-tech:hover .stack-tech-name {
+    color: var(--color-primary);
   }
 
   .stack-tech-logo {

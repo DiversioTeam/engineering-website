@@ -15,10 +15,22 @@ export interface InternshipStory {
   outcomes: string[];
 }
 
+export const internshipWorkAreaLabels = [
+  "Product work",
+  "Platform systems",
+  "Internal tooling",
+] as const;
+
+export const internshipAnchorCaseStudyCount = 1;
+
+const shippedChangesValue = "275+";
+const periodValue = "2022-2026";
+
 export const internshipProgramSnapshot = {
-  internCount: 5,
-  shippedChangesLabel: "275+ production changes",
-  periodLabel: "Recent cohorts across 2022-2026",
+  shippedChangesValue,
+  shippedChangesLabel: `${shippedChangesValue} production changes`,
+  periodValue,
+  periodLabel: `Recent cohorts across ${periodValue}`,
   methodology:
     "These stories are drawn from real intern work that shipped into production systems, internal tooling, and core operational workflows.",
 } as const;
@@ -37,11 +49,11 @@ export const internshipStories: InternshipStory[] = [
     summary:
       "This internship landed in an area a lot of companies leave half-manual forever: the messy space between pull requests, reviews, CI, releases, and team communication.",
     detail:
-      "The result was work on Naboo, a GitHub-native workflow service that turned recurring coordination problems into software. That included the logic around webhook handling, CI visibility, merge-risk signaling, release messaging, and the guardrails needed to keep those actions trustworthy. This is the kind of project that shows real engineering judgment because the value is not in one feature. It is in making the whole workflow calmer, clearer, and harder to get wrong. The strongest proof point is that the team still uses it.",
+      "The intern worked on Naboo, a GitHub-native workflow service that turned recurring coordination problems into software. That included the logic around webhook handling, CI visibility, merge-risk signaling, release messaging, and the guardrails needed to keep those actions trustworthy. Projects like this are a good test of engineering judgment because the value comes from making the whole workflow calmer, clearer, and harder to get wrong. The team still uses it today.",
     outcomes: [
       "Less manual coordination around PR state, review state, release flow, and CI visibility.",
       "A durable internal tool that stayed useful after the internship ended.",
-      "A strong example of intern work becoming engineering infrastructure rather than a one-off project.",
+      "Intern work that became engineering infrastructure instead of ending as a one-off project.",
     ],
   },
   {
@@ -58,11 +70,11 @@ export const internshipStories: InternshipStory[] = [
     summary:
       "The work sat in a high-consequence part of the system: survey ingestion, enrichment, parsing, validation, and the operational tooling around all of it.",
     detail:
-      "That included automatic survey processing, supplementary CSV enrichment, parser upgrades, metadata propagation, and rollback-aware admin workflows. It also reached into customer-facing analytics, where backend logic, frontend display, and shared UI all had to agree. This is strong internship work because it did more than add capability. It made a fragile operational surface more structured, more reversible, and easier for the team to trust with production data.",
+      "That included automatic survey processing, supplementary CSV enrichment, parser upgrades, metadata propagation, and rollback-aware admin workflows. It also reached into customer-facing analytics, where backend logic, frontend display, and shared UI all had to agree. The work added capability, and it also made a fragile operational surface more structured, more reversible, and easier for the team to trust with production data.",
     outcomes: [
       "Manual, error-prone survey handling moved toward structured workflows with approval, processing, and rollback paths.",
       "Analytics behavior improved across backend logic, frontend presentation, and reusable UI components.",
-      "A core operational part of the product became more reliable, not just more feature-rich.",
+      "A core operational part of the product became more reliable while also adding capability.",
     ],
   },
   {
@@ -79,7 +91,7 @@ export const internshipStories: InternshipStory[] = [
     summary:
       "Some internships started with scripts, fixes, or implementation-heavy work and then expanded into model changes, async systems, notifications, APIs, and operator-facing tooling.",
     detail:
-      "That progression is one of the strongest signals on this page. Interns were not frozen in support work. They moved into deeper backend and platform responsibilities once they had the context to handle them well. The result was better admin tooling, safer parsing behavior, stronger profile and notification systems, and improvements to parts of the platform that other engineers and operators rely on every day.",
+      "That progression matters because it shows how the internship can grow. After learning the system, interns moved into deeper backend and platform responsibilities with better admin tooling, safer parsing behavior, stronger profile and notification systems, and improvements to parts of the platform that other engineers and operators rely on every day.",
     outcomes: [
       "Interns were trusted with model changes, async systems, notifications, and internal platform capabilities.",
       "Operational tooling improved for the people running onboarding, parsing, and survey workflows day to day.",
@@ -87,3 +99,5 @@ export const internshipStories: InternshipStory[] = [
     ],
   },
 ];
+
+export const internshipExampleCount = internshipStories.length + internshipAnchorCaseStudyCount;

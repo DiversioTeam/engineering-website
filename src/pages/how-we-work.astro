@@ -15,7 +15,7 @@ const howWeWorkPage = {
   title: "How We Work",
   metaDescription: "Engineering habits, review standards, and working practices that shape how Diversio builds software.",
   heroTitle: "How Diversio Engineering works",
-  heroDescription: "The habits, standards, and decision rules that keep our work fast, reviewable, and trustworthy.",
+  heroDescription: "The habits, standards, and decision rules that keep our work fast, reviewable, and trustworthy. They also say a lot about who tends to do well on the team.",
 } as const;
 const featuredHighlights = getEngineeringHighlightsBySlug(engineeringHighlights, [...featuredHowWeWorkHighlightSlugs]);
 ---
@@ -47,7 +47,7 @@ const featuredHighlights = getEngineeringHighlightsBySlug(engineeringHighlights,
     <SectionHeader
       label="Principles"
       title="What we optimize for"
-      description="The standards that shape our decisions before the implementation details show up."
+      description="The standards that shape our decisions and the qualities that help someone settle into the engineering team."
       variant="editorial"
     />
     <FeatureList features={engineeringPrinciples} class="how-we-work-principles" />
@@ -87,7 +87,7 @@ const featuredHighlights = getEngineeringHighlightsBySlug(engineeringHighlights,
     <SectionHeader
       label="Examples"
       title="Where those habits show up"
-      description="A few examples of the same habits turning into tooling, review flow, and faster context recovery."
+      description="Examples of the same habits turning into tooling, review flow, and faster context recovery."
       variant="editorial"
     />
     <div class="highlight-list">

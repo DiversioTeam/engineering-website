@@ -68,11 +68,11 @@ export const engineeringHighlights: EngineeringHighlight[] = [
   {
     slug: "docs-as-harness",
     lane: "Documentation",
-    title: "Docs written for operators, not just for marketing",
+    title: "Docs written for the people who have to run the system",
     summary:
       "Short routing docs, deeper runbooks, and first-principles explanations turn repeated engineering pain into reusable system knowledge.",
     proof:
-      "The tools repo already uses repo-local docs, generated deep-doc pages, and a strong “why this exists” style.",
+      "The tools repo already uses repo-local docs, generated deep-doc pages, and a clear “why this exists” style.",
     href: "/docs",
     hrefLabel: "Read the docs model",
   },
@@ -92,7 +92,7 @@ export const engineeringHighlights: EngineeringHighlight[] = [
     lane: "Developer Experience",
     title: "Performance work measured before it is celebrated",
     summary:
-      "CI and workflow improvements are treated as engineering changes that should be baselined, measured, and explained rather than justified by instinct alone.",
+      "CI and workflow improvements are treated as engineering changes that should be baselined, measured, and explained before anyone celebrates them.",
     proof:
       "Writing and utility docs already reflect a measurement-first posture for CI, delivery, and developer-experience changes.",
     href: "/blog/no-code-by-hand-agentic-platform-acceleration",

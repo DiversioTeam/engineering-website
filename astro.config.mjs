@@ -5,6 +5,8 @@ import { siteConfig } from "./site.config.mjs";
 export default defineConfig({
   site: siteConfig.siteUrl,
   output: "static",
+  // Preserve Astro 6's HTML whitespace semantics instead of Astro 7's JSX-style compression.
+  compressHTML: true,
   build: {
     // Cloudflare-friendly: no inline assets > 4KB
     inlineStylesheets: "auto",

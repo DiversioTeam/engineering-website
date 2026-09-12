@@ -29,7 +29,7 @@ const featuredTools = getMarketplaceItemsBySlug(plugins, homepageFeaturedPluginS
 const publishedPosts = await getPublishedBlogPosts();
 const metrics = await getSiteMetrics(publishedPosts);
 const summaryWritingValue = publishedPosts.length > 0 ? String(metrics.publishedPostCount) : String(metrics.systemsHighlightCount);
-const summaryWritingLabel = publishedPosts.length > 0 ? "Published Writing" : "Systems Notes";
+const summaryWritingLabel = publishedPosts.length > 0 ? "Engineering articles" : "Systems guides";
 const writingMeta = publishedPosts.length === 0
   ? "No published posts yet"
   : metrics.originalPostCount > 0 && metrics.repostCount > 0
@@ -38,7 +38,6 @@ const writingMeta = publishedPosts.length === 0
       ? `${metrics.originalPostCount} original post${metrics.originalPostCount === 1 ? "" : "s"}`
       : `${metrics.repostCount} curated repost${metrics.repostCount === 1 ? "" : "s"}`;
 const featuredWritingPost = pickFeaturedBlogPost(publishedPosts);
-const homeProofNote = `Includes ${internshipProgramSnapshot.shippedChangesLabel} across ${internshipExampleCount} internship examples from recent cohorts across ${internshipProgramSnapshot.periodValue}.`;
 const homeTopicLabels = [
   "Team habits",
   "Systems notes",
@@ -47,12 +46,32 @@ const homeTopicLabels = [
   "Internships",
 ] as const;
 const homeProofCards = [
-  { value: String(metrics.pluginCount), label: "Plugins" },
-  { value: String(metrics.totalSkills), label: "Skills" },
-  { value: String(metrics.stackLayerCount), label: "Stack layers" },
-  { value: summaryWritingValue, label: summaryWritingLabel },
-  { value: String(metrics.openRepoCount), label: "Open repos" },
-  { value: internshipProgramSnapshot.shippedChangesValue, label: "Production changes" },
+  {
+    value: String(metrics.totalSkills),
+    label: "AI workflows",
+    description: "Reusable instructions for code reviews, releases, API documentation, and more.",
+    href: "/skills/",
+  },
+  {
+    value: String(metrics.piPackageCount),
+    label: "AI terminal add-ons",
+    description: "Extend Pi, a terminal-based coding assistant, with CI checks, image routing, and development workflows.",
+    href: "/pi/",
+  },
+  {
+    value: String(openSourceProjects.length),
+    label: "Standalone tools",
+    description: "Run checks locally, organize agent terminals, or connect external services.",
+    href: "#open-source-projects",
+  },
+  {
+    value: summaryWritingValue,
+    label: summaryWritingLabel,
+    description: publishedPosts.length > 0
+      ? "Original writing and selected articles on how software gets built."
+      : "Explore the architecture and technology behind our products.",
+    href: publishedPosts.length > 0 ? siteConfig.routes.blog : siteConfig.routes.systems,
+  },
 ] as const;
 const homePathCards = [
   {
@@ -78,7 +97,7 @@ const homePathCards = [
     description: siteEntryPoints.tools.description,
     href: siteEntryPoints.tools.href,
     cta: siteEntryPoints.tools.cta,
-    meta: `${metrics.pluginCount} plugins · ${metrics.totalSkills} skills`,
+    meta: `${metrics.totalSkills} AI workflows · ${metrics.piPackageCount} Pi add-ons`,
   },
   {
     label: "Internships",
@@ -134,20 +153,21 @@ function getPostSlug(post: { id: string; data: { slug?: string } }) {
         </div>
       </div>
 
-      <aside class="home-proof-card" aria-label="Site proof points">
-        <div class="home-proof-header">
-          <span class="label-caps">In the open</span>
-          <span class="code-text-sm">Diversio Engineering</span>
+      <aside class="home-proof-card" aria-labelledby="home-resources-title">
+        <div>
+          <h2 id="home-resources-title" class="headline-sm">Tools to use. Ideas to borrow.</h2>
+          <p class="body-md home-proof-note">Explore our open-source tools, reusable AI workflows, and engineering notes.</p>
         </div>
         <div class="home-proof-grid">
           {homeProofCards.map((homeProofCard) => (
-            <div class="home-proof-item">
+            <a href={homeProofCard.href} class="home-proof-item">
               <span class="home-proof-value">{homeProofCard.value}</span>
-              <span class="label-caps home-proof-label">{homeProofCard.label}</span>
-            </div>
+              <h3 class="home-proof-label">{homeProofCard.label}</h3>
+              <p class="home-proof-description">{homeProofCard.description}</p>
+              <span class="home-proof-link" aria-hidden="true">Explore →</span>
+            </a>
           ))}
         </div>
-        <p class="body-md home-proof-note">{homeProofNote}</p>
       </aside>
     </div>
   </section>
@@ -234,7 +254,7 @@ function getPostSlug(post: { id: string; data: { slug?: string } }) {
     </CardGrid>
   </section>
 
-  <section class="page-section page-section--top-border">
+  <section id="open-source-projects" class="page-section page-section--top-border">
     <SectionHeader
       label="Open Source"
       title="More open source projects"
@@ -358,12 +378,13 @@ function getPostSlug(post: { id: string; data: { slug?: string } }) {
   }
 
   .home-proof-card {
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     gap: var(--space-lg);
     background: linear-gradient(180deg, var(--color-surface), color-mix(in srgb, var(--color-primary-container) 14%, var(--color-surface)));
   }
 
-  .home-proof-header,
   .home-path-header {
     display: flex;
     justify-content: space-between;
@@ -378,8 +399,10 @@ function getPostSlug(post: { id: string; data: { slug?: string } }) {
   }
 
   .home-proof-item {
-    display: grid;
-    gap: var(--space-2xs);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    text-decoration: none;
     padding: var(--space-md);
     border: var(--border-hairline);
     border-radius: 0.875rem;
@@ -394,7 +417,32 @@ function getPostSlug(post: { id: string; data: { slug?: string } }) {
     color: var(--color-text);
   }
 
-  .home-proof-label,
+  .home-proof-label {
+    margin: 0;
+    color: var(--color-text);
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+
+  .home-proof-description {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .home-proof-link {
+    margin-top: auto;
+    color: var(--color-primary);
+    font-size: 0.875rem;
+  }
+
+  .home-proof-item:hover,
+  .home-proof-item:focus-visible {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-block-sm);
+  }
+
   .home-path-meta {
     color: var(--color-text-muted);
   }
@@ -658,7 +706,6 @@ function getPostSlug(post: { id: string; data: { slug?: string } }) {
     .catalog-header,
     .latest-post-meta,
     .latest-post-footer,
-    .home-proof-header,
     .home-path-header,
     .project-card-header {
       align-items: flex-start;

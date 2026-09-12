@@ -404,8 +404,8 @@ def main() -> None:
     marketplace = load_marketplace()
     plugins = marketplace.get("plugins", [])
     pi_packages = marketplace.get("piPackages", [])
-    plugin_skill_count = sum(len(plugin.get("skills", [])) for plugin in plugins)
     skill_docs = collect_skill_docs()
+    skill_count = len(skill_docs)
     blog_posts = collect_blog_posts()
     original_blog_posts = [post for post in blog_posts if post.get("sourceType") == "original"]
     repost_blog_posts = [post for post in blog_posts if post.get("sourceType") == "repost"]
@@ -427,8 +427,8 @@ def main() -> None:
             "description": "Engineering systems, open tools, deep docs, and writing from Diversio.",
             "badge": "ENGINEERING HUB",
             "panel_title": "OVERVIEW",
-            "line1": f"{len(plugins)} plugins",
-            "line2": f"{len(pi_packages)} Pi packages",
+            "line1": f"{skill_count} AI workflows",
+            "line2": f"{len(pi_packages)} terminal add-ons",
             "line3": "Systems · Tools · Writing",
             "footer": "engineering.diversio.com/",
             "output": OUTPUT_DIR / "home.png",
@@ -461,7 +461,7 @@ def main() -> None:
             "badge": "AGENTIC TOOLS",
             "panel_title": "TOOLS",
             "line1": f"{len(plugins)} plugins",
-            "line2": f"{plugin_skill_count} skills",
+            "line2": f"{skill_count} skills",
             "line3": f"{len(pi_packages)} Pi packages",
             "footer": "engineering.diversio.com/agentic-tools",
             "output": OUTPUT_DIR / "agentic-tools.png",
@@ -471,7 +471,7 @@ def main() -> None:
             "description": "Maintainer docs for authoring, packaging, distribution, and validation.",
             "badge": "DOCUMENTATION",
             "panel_title": "DOCS",
-            "line1": f"{plugin_skill_count} skills",
+            "line1": f"{skill_count} skills",
             "line2": f"{len(pi_packages)} Pi packages",
             "line3": "Authoring · Validation",
             "footer": "engineering.diversio.com/docs",
@@ -483,7 +483,7 @@ def main() -> None:
             "badge": "REGISTRY",
             "panel_title": "INVENTORY",
             "line1": f"{len(plugins)} plugins",
-            "line2": f"{plugin_skill_count} skills",
+            "line2": f"{skill_count} skills",
             "line3": f"{len(pi_packages)} Pi packages",
             "footer": "engineering.diversio.com/registry",
             "output": OUTPUT_DIR / "registry.png",

@@ -19,6 +19,8 @@ If you need to make a routine change to the engineering site, start here. This g
 | `/how-we-work` practice rows | `src/data/engineering-practices.ts` | Array of `{ title, summary, detail, relatedHref? }` |
 | Stack showcase on `/systems` | `src/data/engineering-stack.ts` | Layers with technologies, supporting tools, logos |
 | Systems highlights | `src/data/engineering-highlights.ts` | Used by both `/systems` and `/how-we-work` |
+| Homepage resource counts and explanations | `src/pages/index.astro` + `src/utils/site-metrics.ts` | Count skills from `skillDocs`, including Pi-local skills; explain each number in plain language |
+| Open-source project order and descriptions | `src/data/open-source-projects.ts` | Shared by homepage and community; local-ci and pi-cmux lead |
 | Featured tools on homepage | `src/data/agentic-tools.ts` → `homepageFeaturedPluginSlugs` | Array of plugin slugs |
 | Featured tools on `/agentic-tools` | `src/data/agentic-tools.ts` → `toolsPageFeaturedPluginSlugs` | |
 | A new blog post | `src/content/blog/<slug>.md` | See `docs/runbooks/blog-authoring.md` for frontmatter schema, repost rules, and the ashwch.com cross-post workflow |
@@ -50,7 +52,7 @@ If you need to make a routine change to the engineering site, start here. This g
 cp ../agent-skills-marketplace/website/src/data/marketplace.json src/data/marketplace.json
 
 # 2. Build and check
-npm run build
+npm run build  # includes homepage counts, descriptions, and project-order checks
 
 # 3. Regenerate OG images if metadata changed
 python3 scripts/generate-og-images.py && npm run build

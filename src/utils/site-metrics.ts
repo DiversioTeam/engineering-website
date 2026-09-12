@@ -2,6 +2,7 @@ import { engineeringHighlights } from "../data/engineering-highlights";
 import { engineeringStack } from "../data/engineering-stack";
 import { plugins, piPackages } from "../data/marketplace.json";
 import { openSourceProjects } from "../data/open-source-projects";
+import { skillDocs } from "../data/site-docs";
 import { getPublishedBlogPosts, type BlogPost } from "./blog-posts";
 
 export interface SiteMetrics {
@@ -21,13 +22,12 @@ export async function getSiteMetrics(publishedPosts?: BlogPost[]): Promise<SiteM
   const resolvedPosts = publishedPosts ?? await getPublishedBlogPosts();
   const originalPostCount = resolvedPosts.filter((post) => post.data.sourceType === "original").length;
   const repostCount = resolvedPosts.filter((post) => post.data.sourceType === "repost").length;
-  const totalSkills = plugins.reduce((sum, plugin) => sum + plugin.skills.length, 0);
 
   return {
     pluginCount: plugins.length,
     piPackageCount: piPackages.length,
     toolSurfaceCount: plugins.length + piPackages.length,
-    totalSkills,
+    totalSkills: skillDocs.length,
     publishedPostCount: resolvedPosts.length,
     originalPostCount,
     repostCount,

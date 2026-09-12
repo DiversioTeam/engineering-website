@@ -2,7 +2,9 @@
 
 This repo does not currently have separate lint, unit-test, or dedicated type-check
 wrapper commands. The primary gate is a clean Astro production build with the
-correct ASM inputs present.
+correct ASM inputs present, followed by `scripts/check-homepage.mjs` (both run
+through `npm run build`). The homepage check verifies skill counts against the
+rendered skill directory, explained resource cards, and the featured repo order.
 
 ## Required Commands
 

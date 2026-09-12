@@ -19,11 +19,12 @@ import CodeBlock from "../components/CodeBlock.astro";
 import RuntimeCodeTabs from "../components/RuntimeCodeTabs.astro";
 import { toolsPageFeaturedPluginSlugs } from "../data/agentic-tools";
 import { plugins, piPackages } from "../data/marketplace.json";
+import { skillDocs } from "../data/site-docs";
 import { getMarketplaceItemsBySlug } from "../utils/marketplace-content";
 import { siteConfig } from "../../site.config.mjs";
 
 const featured = getMarketplaceItemsBySlug(plugins, toolsPageFeaturedPluginSlugs);
-const totalSkills = plugins.reduce((sum, p) => sum + p.skills.length, 0);
+const totalSkills = skillDocs.length;
 const categories = [...new Set(plugins.map((p) => p.category))];
 
 /**

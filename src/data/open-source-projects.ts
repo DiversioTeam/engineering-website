@@ -7,6 +7,20 @@
 // - adding/removing a repo should be a small data edit, not a page rewrite
 export const openSourceProjects = [
   {
+    name: "local-ci",
+    repo: "DiversioTeam/local-ci-runner",
+    category: "Developer workflow",
+    description: "Run your repository’s checks locally, inspect saved results, and report results to GitHub when ready.",
+    url: "https://github.com/DiversioTeam/local-ci-runner",
+  },
+  {
+    name: "pi-cmux",
+    repo: "DiversioTeam/pi-cmux",
+    category: "Shared runtime",
+    description: "Organize Pi coding agents in the cmux terminal with split panes, workspace tabs, and native notifications.",
+    url: "https://github.com/DiversioTeam/pi-cmux",
+  },
+  {
     name: "clickup-mcp",
     repo: "DiversioTeam/clickup-mcp",
     category: "MCP",
@@ -19,19 +33,5 @@ export const openSourceProjects = [
     category: "MCP",
     description: "Expose Gemini CLI workflows through MCP for research and automation.",
     url: "https://github.com/DiversioTeam/gemini-cli-mcp",
-  },
-  {
-    name: "pi-cmux",
-    repo: "DiversioTeam/pi-cmux",
-    category: "Shared runtime",
-    description: "Shared cmux utilities used in Pi-powered terminal workflows.",
-    url: "https://github.com/DiversioTeam/pi-cmux",
-  },
-  {
-    name: "local-ci-runner",
-    repo: "DiversioTeam/local-ci-runner",
-    category: "Developer workflow",
-    description: "Shared local CI runner for repo-owned verification steps.",
-    url: "https://github.com/DiversioTeam/local-ci-runner",
   },
 ];

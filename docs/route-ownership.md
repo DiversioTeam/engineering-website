@@ -21,6 +21,8 @@ The site renders from one repo (`engineering-website`) but some content lives in
 | `/` (hub) | engineering-website | engineering-website (data files in repo) |
 | `/how-we-work` | engineering-website | engineering-website |
 | `/systems` | engineering-website | engineering-website |
+| `/systems/dev-center` | engineering-website | engineering-website (public overview; not private tool documentation) |
+| `/systems/courage` | engineering-website | engineering-website (public overview; not private operational documentation) |
 | `/community` | engineering-website | engineering-website |
 | `/internships` | engineering-website | engineering-website |
 | `/agentic-tools` | engineering-website | agent-skills-marketplace (`marketplace.json`, catalog metadata) |

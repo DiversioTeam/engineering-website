@@ -6,6 +6,6 @@ export const howWeWorkNotice = {
 
 export const featuredHowWeWorkHighlightSlugs = [
   "review-orchestration",
-  "measured-ci-improvements",
-  "multi-repo-workspace",
+  "dev-center",
+  "courage",
 ] as const;

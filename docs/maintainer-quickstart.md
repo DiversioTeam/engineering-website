@@ -19,6 +19,7 @@ If you need to make a routine change to the engineering site, start here. This g
 | `/how-we-work` practice rows | `src/data/engineering-practices.ts` | Array of `{ title, summary, detail, relatedHref? }` |
 | Stack showcase on `/systems` | `src/data/engineering-stack.ts` | Layers with technologies, supporting tools, logos |
 | Systems highlights | `src/data/engineering-highlights.ts` | Used by both `/systems` and `/how-we-work` |
+| Dev Center or Courage public overview | `src/pages/systems/{dev-center,courage}.astro` | Shared `SystemOverviewLayout.astro`; see the private-system editorial boundaries in `content-governance.md` |
 | Homepage resource counts and explanations | `src/pages/index.astro` + `src/utils/site-metrics.ts` | Count skills from `skillDocs`, including Pi-local skills; explain each number in plain language |
 | Open-source project order and descriptions | `src/data/open-source-projects.ts` | Shared by homepage and community; local-ci and pi-cmux lead |
 | Featured tools on homepage | `src/data/agentic-tools.ts` → `homepageFeaturedPluginSlugs` | Array of plugin slugs |

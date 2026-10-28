@@ -1,0 +1,72 @@
+---
+import SystemOverviewLayout from "../../layouts/SystemOverviewLayout.astro";
+import Button from "../../components/Button.astro";
+const articleUrl = "https://ashwch.com/all-tools-should-now-have-two-users.html";
+---
+<SystemOverviewLayout
+  title="Dev Center"
+  hook="You click. Your agent types. Same running stack."
+  description="One worktree, its own database, every service in view. A native app for engineers and a CLI for agents—not two different ways to start the same project."
+  ogImage="/og/systems-dev-center.png"
+>
+  <Fragment slot="actions">
+    <Button href="#in-action">Watch it work ↓</Button>
+    <Button href={articleUrl} variant="secondary">Read the field notes ↗</Button>
+  </Fragment>
+  <figure slot="visual" class="app-preview">
+    <div class="preview-bar"><span class="status-dot" aria-hidden="true"></span><span class="code-text-sm">ONE WORKTREE / THE WHOLE STACK</span></div>
+    <a href="/images/systems/dev-center-services.webp" aria-label="View the full-size Dev Center demo screenshot">
+      <img src="/images/systems/dev-center-services.webp" width="1800" height="1440" alt="Dev Center's demo worktree: PostgreSQL, Redis, backend, frontend and shells, each with its own visible terminal." fetchpriority="high" />
+    </a>
+    <figcaption>Real app. Demo worktree. <a href="/images/systems/dev-center-services.webp">See full size ↗</a></figcaption>
+  </figure>
+
+  <section class="system-section" id="in-action">
+    <div class="section-intro">
+      <div><span class="eyebrow label-caps">The useful part</span><h2>The agent’s work doesn’t disappear into another terminal.</h2></div>
+      <p>An agent sends commands through the CLI. You see them run in the app. Same logs, same processes, same state—so you can inspect the work or take over.</p>
+    </div>
+    <figure class="demo-video">
+      <video controls muted playsinline preload="none" poster="/images/systems/dev-center-agent.poster.jpg" aria-label="Dev Center demo: CLI commands appear in the app's live terminals" aria-describedby="demo-description">
+        <source src="/images/systems/dev-center-agent.mp4" type="video/mp4" />
+        <a href="/images/systems/dev-center-agent.mp4">Download the demo video</a>
+      </video>
+      <figcaption id="demo-description">Agent terminal above. Native app below. Recorded at the same moment for <a href={articleUrl}>Ashwini’s case study</a>. No audio.</figcaption>
+    </figure>
+    <details class="demo-description"><summary>What happens in the demo</summary><p>The agent sends <code>git log</code> to the app’s shell, runs a query in its Django shell, starts a migration-listing command in a new terminal, then reads the Django shell’s output back through the CLI. Each action is visible in the app.</p></details>
+  </section>
+
+  <section class="system-section">
+    <div class="section-intro">
+      <div><span class="eyebrow label-caps">Not just a laptop app</span><h2>Same tool. Three places we work.</h2></div>
+      <p>We didn’t build a second stack launcher for our Slack agent, or a third one for remote sandboxes.</p>
+    </div>
+    <div class="three-up">
+      <article class="field-card"><span class="card-number">01 / LOCAL</span><h3>An engineer’s computer</h3><p>App and CLI share a stack on macOS or Linux. Each worktree gets its own database, Redis, ports and URLs.</p></article>
+      <article class="field-card"><span class="card-number">02 / COURAGE</span><h3>No desktop required</h3><p>Our Slack agent uses Dev Center headlessly to prepare a development stack and return a preview.</p><a class="text-link" href="/systems/courage">Meet Courage →</a></article>
+      <article class="field-card"><span class="card-number">03 / CRAFTING</span><h3>The remote sandbox, too</h3><p>The same tool runs inside our Crafting environments. Different place; familiar commands and service controls.</p></article>
+    </div>
+  </section>
+
+  <aside class="reading-note">
+    <div><span class="eyebrow label-caps">From the builder / October 26, 2026</span><h2>All tools should now have two users.</h2><p>The false starts, app demos, command-discovery experiments and rough edges behind Dev Center.</p><a class="text-link" href={articleUrl}>Read Ashwini’s full article ↗</a></div>
+    <div class="study-stat"><strong>2,686</strong><p>agent-issued Dev Center commands on one laptop in the article’s 24-day sample.</p><p class="small-note">A recorded case study—not a live usage counter. Dev Center is private; our reusable public workflows are in <a href="/agentic-tools">Agentic Tools</a>.</p></div>
+  </aside>
+</SystemOverviewLayout>
+<style>
+  .app-preview { background: var(--color-surface); border: var(--border-hairline); border-radius: .75rem; overflow: hidden; box-shadow: 0 18px 48px rgba(35,16,82,.09); }
+  .preview-bar { display: flex; align-items: center; gap: .6rem; padding: .8rem 1rem; background: var(--color-surface-low); border-bottom: var(--border-hairline); }
+  .preview-bar span { font-size: .65rem; letter-spacing: .07em; }
+  .status-dot { width: .5rem; height: .5rem; background: var(--color-success); border-radius: 50%; flex-shrink: 0; }
+  .app-preview img { display: block; width: 100%; height: auto; }
+  figcaption { padding: .8rem 1rem; font-size: .75rem; color: var(--color-text-secondary); }
+  figcaption a { text-decoration: underline; }
+  .demo-video { max-width: 960px; margin: auto; border: var(--border-hairline); border-radius: .75rem; overflow: hidden; background: var(--color-surface); }
+  video { display: block; width: 100%; aspect-ratio: 3 / 2; background: var(--color-code-bg); }
+  .demo-description { max-width: 960px; margin: 1rem auto 0; font-size: .875rem; }
+  summary { cursor: pointer; color: var(--color-primary); }
+  .demo-description p { margin-top: .75rem; }
+  .study-stat { border-left: 1px solid var(--color-hairline); padding-left: 2rem; }
+  .study-stat strong { font-family: var(--font-headline); font-size: clamp(3rem, 6vw, 5rem); color: var(--color-primary); letter-spacing: -.06em; line-height: 1.2; }
+  @media (max-width: 600px) { .study-stat { border-left: 0; border-top: var(--border-hairline); padding: 1.5rem 0 0; } }
+</style>

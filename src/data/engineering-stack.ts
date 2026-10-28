@@ -109,7 +109,9 @@ export const engineeringStack: EngineeringStackLayer[] = [
       { name: "sandboxes.cloud", logoSrc: "/logos/stack/sandboxes.svg", logoAlt: "sandboxes.cloud logo" },
       { name: "ngrok", logoSrc: "/logos/stack/ngrok.png", logoAlt: "ngrok logo" },
     ],
-    supportingTools: ["Ghostty", "tmux", "nvm"],
+    supportingTools: ["Dev Center (internal)", "Ghostty", "tmux", "nvm"],
+    relatedHref: "/systems/dev-center",
+    relatedLabel: "How Dev Center runs our stacks",
   },
   {
     slug: "workflow",
@@ -139,6 +141,7 @@ export const engineeringStack: EngineeringStackLayer[] = [
       },
     ],
     supportingTools: [
+      "Courage (internal)",
       "Codex 5.4",
       "Codex 5.5",
       "Anthropic Fable",

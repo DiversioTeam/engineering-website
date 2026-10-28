@@ -1,0 +1,64 @@
+---
+import PageLayout from "./PageLayout.astro";
+import { getGeneratedOgImage } from "../utils/og-image";
+
+interface Props {
+  title: string;
+  description: string;
+  hook: string;
+  ogImage: string;
+}
+const { title, description, hook, ogImage } = Astro.props;
+---
+<PageLayout {title} {description} ogImage={getGeneratedOgImage(ogImage, "/og/systems.png")} socialImageAlt={`${title} — Diversio Engineering`} currentNav="systems">
+  <article class="system-overview">
+    <header class="system-hero">
+      <div class="hero-copy">
+        <a href="/systems" class="label-caps back-link">← Systems / Built at Diversio</a>
+        <h1>{title}</h1>
+        <p class="hero-hook">{hook}</p>
+        <p class="hero-description">{description}</p>
+        <div class="hero-actions"><slot name="actions" /></div>
+        <p class="availability code-text-sm">Private tool · Public field notes</p>
+      </div>
+      <div class="hero-visual"><slot name="visual" /></div>
+    </header>
+    <div class="system-content"><slot /></div>
+  </article>
+</PageLayout>
+<style>
+  .system-overview { max-width: 1440px; margin-inline: auto; padding: 0 var(--space-margin); }
+  .system-hero { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 3rem; align-items: center; padding: 4rem 0; }
+  .back-link { color: var(--color-primary); }
+  h1 { font-size: clamp(3.5rem, 6vw, 6rem); letter-spacing: -0.065em; margin: 2rem 0 1.25rem; }
+  .hero-hook { font-family: var(--font-headline); font-size: clamp(1.5rem, 2.7vw, 2.25rem); font-weight: 600; line-height: 1.25; letter-spacing: -0.035em; max-width: 22ch; }
+  .hero-description { color: var(--color-text-secondary); margin-top: 1.25rem; max-width: 44ch; line-height: 1.65; }
+  .hero-actions { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 1.75rem; }
+  .availability { color: var(--color-text-muted); margin-top: 1.25rem; }
+  .hero-visual, .hero-copy { min-width: 0; }
+  .system-content :global(.system-section) { padding: 3.5rem 0; border-top: var(--border-hairline); }
+  .system-content :global(.section-intro) { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: end; margin-bottom: 2rem; }
+  .system-content :global(h2) { font-size: clamp(1.75rem, 3vw, 2.5rem); letter-spacing: -.04em; max-width: 25ch; }
+  .system-content :global(h3) { font-size: 1.2rem; margin-bottom: .75rem; }
+  .system-content :global(p) { line-height: 1.65; color: var(--color-text-secondary); }
+  .system-content :global(.eyebrow) { display: block; color: var(--color-primary); margin-bottom: .75rem; }
+  .system-content :global(.three-up) { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .system-content :global(.field-card) { padding: 1.75rem; background: var(--color-surface); border: var(--border-hairline); border-radius: .75rem; }
+  .system-content :global(.card-number) { display: block; font-family: var(--font-code); color: var(--color-primary); margin-bottom: 1.5rem; }
+  .system-content :global(.reading-note) { display: grid; grid-template-columns: 1.3fr 1fr; gap: 3rem; background: var(--color-primary-container); padding: 2.5rem; border-radius: .75rem; margin-bottom: 3.5rem; align-items: center; }
+  .system-content :global(.reading-note h2) { margin-bottom: 1rem; }
+  .system-content :global(.text-link) { display: inline-block; color: var(--color-primary); text-decoration: underline; text-underline-offset: .2em; margin-top: 1rem; font-weight: 600; }
+  .system-content :global(.small-note) { font-size: .8125rem; margin-top: 1rem; }
+  @media (max-width: 900px) {
+    .system-hero { grid-template-columns: 1fr; gap: 2rem; padding: 2.5rem 0; }
+    .hero-hook { max-width: 30ch; }
+    .system-content :global(.three-up) { gap: .75rem; }
+    .system-content :global(.field-card) { padding: 1.25rem; }
+  }
+  @media (max-width: 600px) {
+    .system-overview { padding-inline: 1rem; }
+    .system-content :global(.section-intro), .system-content :global(.three-up), .system-content :global(.reading-note) { grid-template-columns: 1fr; gap: 1.25rem; }
+    .system-content :global(.system-section) { padding: 2.5rem 0; }
+    .system-content :global(.reading-note) { padding: 1.5rem; }
+  }
+</style>

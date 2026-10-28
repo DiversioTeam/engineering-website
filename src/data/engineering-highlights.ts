@@ -35,6 +35,28 @@ export const engineeringHighlightLaneOrder: EngineeringHighlightLane[] = [
 
 export const engineeringHighlights: EngineeringHighlight[] = [
   {
+    slug: "dev-center",
+    lane: "Developer Experience",
+    title: "Dev Center: one tool for people and agents",
+    summary:
+      "A native app and CLI share the same development stacks on developer computers, on Courage’s machine, and inside Crafting sandboxes.",
+    proof:
+      "Worktree isolation and shared app/CLI actions make parallel development and inspectable previews practical without a second agent-only launcher.",
+    href: "/systems/dev-center",
+    hrefLabel: "Explore Dev Center",
+  },
+  {
+    slug: "courage",
+    lane: "Agentic Tooling",
+    title: "Courage: agent-assisted work from Slack",
+    summary:
+      "Our private company assistant is used across Diversio, bringing workflows such as development previews into the conversations where work begins.",
+    proof:
+      "Courage uses Dev Center’s CLI rather than a separate environment implementation. The public overview covers the workflow, not private operational details.",
+    href: "/systems/courage",
+    hrefLabel: "Meet Courage",
+  },
+  {
     slug: "multi-repo-workspace",
     lane: "Developer Experience",
     title: "A multi-repo workspace that reduces context switching",

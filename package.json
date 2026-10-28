@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/check-homepage.mjs",
+    "build": "astro build && node scripts/check-homepage.mjs && node scripts/check-system-overviews.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },

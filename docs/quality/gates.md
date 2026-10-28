@@ -2,9 +2,13 @@
 
 This repo does not currently have separate lint, unit-test, or dedicated type-check
 wrapper commands. The primary gate is a clean Astro production build with the
-correct ASM inputs present, followed by `scripts/check-homepage.mjs` (both run
-through `npm run build`). The homepage check verifies skill counts against the
-rendered skill directory, explained resource cards, and the featured repo order.
+correct ASM inputs present, followed by `scripts/check-homepage.mjs` and
+`scripts/check-system-overviews.mjs` (all run through `npm run build`). The homepage
+check verifies skill counts against the rendered skill directory, explained resource
+cards, and the featured repo order. The systems check verifies the two public
+private-tool overviews, their discovery links and social images, a small private-link
+denylist, and the Dev Center repost's external canonical. It does not replace an
+editorial privacy review.
 
 ## Required Commands
 

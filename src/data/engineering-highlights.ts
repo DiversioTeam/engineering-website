@@ -39,7 +39,7 @@ export const engineeringHighlights: EngineeringHighlight[] = [
     lane: "Developer Experience",
     title: "Dev Center: one tool for people and agents",
     summary:
-      "A native app and CLI share the same development stacks on developer computers, on Courage’s machine, and inside Crafting sandboxes.",
+      "A native app and CLI share the same development stacks on developer computers and on Courage’s machine.",
     proof:
       "Worktree isolation and shared app/CLI actions make parallel development and inspectable previews practical without a second agent-only launcher.",
     href: "/systems/dev-center",

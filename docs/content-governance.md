@@ -211,7 +211,6 @@ Stack logos live in `public/logos/stack/`.
 | `ghostty.png` | `https://ghostty.org/favicon-32.png` | favicon-grade fallback |
 | `pi.svg` | `https://pi.dev/logo.svg` | official Pi logo |
 | `docker.png` | `https://www.docker.com/app/uploads/2024/02/cropped-docker-logo-favicon-192x192.png` | icon-grade fallback |
-| `sandboxes.svg` | `https://sandboxes.cloud/icon.svg` | official icon |
 | `ngrok.png` | `https://ngrok.com/assets/apple-touch-icon.png` | icon-grade fallback |
 | `cmux.png` | `https://cmux.com/logo.png` | official cmux logo |
 | `codex.png` | `https://developers.openai.com/favicon.png` | favicon-grade fallback for Codex docs |
@@ -229,6 +228,7 @@ If a better official asset becomes available later:
 Sources for the October 2026 copy:
 - Ashwini's published article, https://ashwch.com/all-tools-should-now-have-two-users.html (October 26): Dev Center's app/CLI design, isolated worktrees, headless Courage previews and Crafting use.
 - The owner's October 27 update: Dev Center is used on developer computers, by Courage and inside Crafting; Courage is used across the company. This is an adoption statement, not a measured usage count.
+- November 2026: Crafting was retired (monolith#475), so the pages no longer list it as a place Dev Center runs.
 
 Keep the full article canonical on ashwch.com; the engineering blog has a short repost. It is deliberately featured for this update, and was confirmed as the newest article in the live RSS feed on October 27. The Dev Center overview reuses two published demo assets from `images/articles/your-tools-now-have-two-users/`: `img/gallery-01-services-overview.webp` (resized to a real WebP) and `video/app-03-agent-drives-app-terminals.mp4` with its poster (audio track removed). These live under `public/images/systems/`; they depict a demo worktree, not production. Keep video playback opt-in. Courage's diagram is labelled as an illustration, not an actual conversation. Link readers to the published measurements instead of presenting them as current fleet-wide results. Do not infer that private previews are public or that either tool is available to install from the public catalog.
 

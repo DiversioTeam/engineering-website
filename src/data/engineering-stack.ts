@@ -98,7 +98,7 @@ export const engineeringStack: EngineeringStackLayer[] = [
     label: "Developer environment",
     title: "cmux, Zed, Pi, Docker, and flexible local tooling keep daily work moving",
     summary:
-      "Daily engineering work depends on more than the application stack. Editors, terminals, local containers, remote sandboxes, and quick connectivity tools all affect how quickly an engineer can understand a problem and move through it.",
+      "Daily engineering work depends on more than the application stack. Editors, terminals, local containers, and quick connectivity tools all affect how quickly an engineer can understand a problem and move through it.",
     whyItFits:
       "We embrace open tools that reduce friction in the daily loop: editor choices that stay fast, terminal workflows that make session handoff easier, sandboxes that isolate risky work, and connectivity tools that help expose or test systems without heavyweight setup. cmux has become the primary daily driver in that environment, with Ghostty still very much in the mix.",
     technologies: [
@@ -106,7 +106,6 @@ export const engineeringStack: EngineeringStackLayer[] = [
       { name: "Zed", logoSrc: "/logos/stack/zed.png", logoAlt: "Zed logo" },
       { name: "Pi", logoSrc: "/logos/stack/pi.svg", logoAlt: "Pi logo", wide: true },
       { name: "Docker", logoSrc: "/logos/stack/docker.png", logoAlt: "Docker logo" },
-      { name: "sandboxes.cloud", logoSrc: "/logos/stack/sandboxes.svg", logoAlt: "sandboxes.cloud logo" },
       { name: "ngrok", logoSrc: "/logos/stack/ngrok.png", logoAlt: "ngrok logo" },
     ],
     supportingTools: ["Dev Center (internal)", "Ghostty", "tmux", "nvm"],
